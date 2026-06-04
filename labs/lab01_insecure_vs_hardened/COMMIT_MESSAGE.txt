@@ -1,24 +1,28 @@
-feat(lab01): añadir firmware inseguro/endurecido para ESP32-S3
+fix(lab01): evitar spam de consola cuando stdin no tiene datos
 
-Añade el primer laboratorio funcional del repositorio público de
-ciberseguridad embebida.
+Corrige el bucle de consola del LAB 01 para que la ausencia temporal de
+datos en stdin/USB Serial-JTAG no genere eventos `console_warning` de forma
+continua.
 
-Incluye:
-- firmware ESP-IDF para ESP32-S3
-- arquitectura por componentes con HAL de consola y reloj
-- perfiles INSECURE y HARDENED seleccionables por Kconfig
-- comandos de laboratorio por USB Serial/JTAG
-- vulnerabilidades intencionadas de fuga de secretos, parser débil y reset expuesto
-- mitigaciones de redacción, validación estricta y bloqueo por política
-- documentación audit-grade del laboratorio
-- gates estáticos específicos del LAB 01
-- scanner de logs para evidenciar fugas en INSECURE y ausencia de fugas en HARDENED
+Cambios principales:
+- añade el estado ConsoleReadStatus::NoData
+- diferencia ausencia de datos de línea válida o línea demasiado larga
+- aplica un backoff de 50 ms en la HAL de consola stdio
+- evita registrar warnings repetitivos en el bucle principal de comandos
+- mantiene los logs de errores reales de consola para estados inesperados
 
-Validación realizada por el generador:
+Motivo:
+En ESP-IDF/USB Serial-JTAG, fgets puede devolver nullptr cuando todavía no
+hay línea disponible. Tratarlo como EOF real provocaba un log cada iteración,
+haciendo inutilizable el monitor serie.
+
+Validación requerida:
 - python tools/repo_quality_gates/run_static_repo_gates.py
 - python labs/lab01_insecure_vs_hardened/tools/run_static_gates.py
+- idf.py build
+- idf.py flash monitor
 
 Estado:
-- CUMPLE como implementación inicial audit-grade del LAB 01 a nivel estático.
+- CUMPLE como corrección de usabilidad/observabilidad del LAB 01.
 - NO VALIDADO en build ESP-IDF real dentro de este entorno.
 - NO CUMPLE como firmware de producción.

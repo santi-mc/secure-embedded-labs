@@ -13,6 +13,7 @@ public:
 
 enum class ConsoleReadStatus : std::uint8_t {
     Ok = 0,
+    NoData,
     EndOfFile,
     LineTooLong,
 };

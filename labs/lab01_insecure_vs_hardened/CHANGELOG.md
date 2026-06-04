@@ -7,6 +7,7 @@
 
 ## Unreleased
 
+- Corregido spam de `console_warning` cuando `stdin` no entrega una línea disponible todavía.
 - Pendiente capturar evidencia real en hardware ESP32-S3.
 
 ## 0.1.0

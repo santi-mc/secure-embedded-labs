@@ -1,9 +1,18 @@
 #include "board_hal/stdio_console.hpp"
 
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+
 #include <cstdio>
 #include <vector>
 
 namespace secure_lab {
+
+namespace {
+
+inline constexpr TickType_t kNoDataBackoffTicks = pdMS_TO_TICKS(50U);
+
+}  // namespace
 
 StdioConsoleInput::StdioConsoleInput(const std::size_t max_line_length) noexcept
     : max_line_length_(max_line_length)
@@ -24,7 +33,9 @@ ConsoleReadStatus StdioConsoleInput::readLine(std::string& line)
 
     std::vector<char> buffer(max_line_length_ + 2U, '\0');
     if (std::fgets(buffer.data(), static_cast<int>(buffer.size()), stdin) == nullptr) {
-        return ConsoleReadStatus::EndOfFile;
+        clearerr(stdin);
+        vTaskDelay(kNoDataBackoffTicks);
+        return ConsoleReadStatus::NoData;
     }
 
     line.assign(buffer.data());

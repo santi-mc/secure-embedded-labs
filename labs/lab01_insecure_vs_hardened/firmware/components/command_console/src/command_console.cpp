@@ -49,6 +49,8 @@ CommandConsole::CommandConsole(IConsoleInput& console,
         case ConsoleReadStatus::Ok:
             dispatch(line);
             break;
+        case ConsoleReadStatus::NoData:
+            break;
         case ConsoleReadStatus::LineTooLong:
             log_.event("command_rejected",
                        {{"profile", toString(profile_)},
