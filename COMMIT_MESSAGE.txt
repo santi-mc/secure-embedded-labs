@@ -1,0 +1,17 @@
+chore(repo): inicializar estructura pública de laboratorios embebidos seguros
+
+Crea la base del repositorio público para laboratorios audit-grade de
+ciberseguridad aplicada a microcontroladores y firmware embebido.
+
+Cambios principales:
+- añade estructura general del repositorio
+- incorpora estándar permanente de diseño embebido audit-grade
+- añade documentación base de roadmap, contribución, seguridad y disclaimer
+- separa licencias de código y documentación
+- crea plantillas de laboratorios con README e índice obligatorio
+- añade gates estáticos iniciales para validar estructura documental
+
+Estado:
+- CUMPLE como base estructural del repositorio educativo
+- NO CUMPLE todavía como laboratorio funcional
+- NO VALIDADO en GitHub Actions hasta publicar el repositorio
