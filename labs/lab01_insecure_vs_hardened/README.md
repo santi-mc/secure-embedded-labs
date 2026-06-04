@@ -1,5 +1,7 @@
 # LAB 01 — Firmware inseguro vs firmware endurecido
 
+**Versión:** 0.1.0
+
 ## Índice
 
 - [Objetivo](#objetivo)
@@ -25,99 +27,192 @@
 
 ## Objetivo
 
-Demostrar vulnerabilidades locales intencionadas y su mitigación mediante un perfil endurecido.
+Demostrar, de forma controlada y reproducible, cómo un firmware embebido puede exponer secretos y aceptar configuración inválida por una consola local, y cómo mitigar esos fallos mediante un perfil endurecido.
 
 ## Objetivos de aprendizaje
 
-- Comprender el problema de seguridad abordado por el laboratorio.
-- Reproducir el comportamiento esperado de forma controlada.
-- Aplicar mitigaciones y validar evidencias.
-- Relacionar la práctica con el estándar audit-grade del repositorio.
+- Entender que una consola local también es superficie de ataque.
+- Observar cómo `get_config` y los logs pueden filtrar secretos.
+- Comparar parsing débil frente a parsing estricto.
+- Aplicar redacción de secretos en logs.
+- Diferenciar vulnerabilidad intencionada de precariedad accidental.
+- Practicar evidencias `INSECURE` vs `HARDENED`.
 
 ## Prerrequisitos
 
-- Conocimientos básicos de C/C++ embebido.
-- Conocimientos básicos de ESP-IDF o toolchain equivalente.
-- Lectura del estándar en `standard/estandar_diseno_embebido_audit_grade.md`.
+- ESP-IDF instalado.
+- Conocimientos básicos de C++ embebido.
+- Lectura del estándar `standard/estandar_diseno_embebido_audit_grade.md`.
+- Hardware ESP32-S3 con USB Serial/JTAG operativo.
 
 ## Alcance
 
-Este laboratorio cubrirá únicamente el alcance definido en su documentación específica.
+Este laboratorio cubre seguridad local de consola, logs, secretos ficticios y validación de configuración en RAM.
 
 ## Fuera de alcance
 
-No se considerará producto final ni firmware de producción salvo que el laboratorio lo indique explícitamente.
+```text
+- MQTT/TLS
+- OTA
+- Secure Boot activo
+- Flash Encryption activa
+- NVS segura
+- Ataques remotos
+- Producción
+```
 
 ## Hardware requerido
 
-Pendiente de definición específica del laboratorio.
+- ESP32-S3 DevKit o equivalente.
+- Cable USB de datos conectado al puerto USB nativo.
 
 ## Software requerido
 
-Pendiente de definición específica del laboratorio.
+- ESP-IDF compatible con ESP32-S3.
+- Python 3.
+- Git.
 
 ## Arquitectura prevista
 
-Debe seguir arquitectura por componentes, HAL/BSP, testabilidad y documentación audit-grade.
+El firmware está en `firmware/` y usa arquitectura por componentes:
+
+```text
+main → app_core → command_console/app_config/sensor_sim/security_status/secure_log/board_hal
+```
+
+La documentación detallada está en `docs/architecture.md`.
 
 ## Modelo temporal
 
-Pendiente de definición específica del laboratorio.
+Modelo event-driven cooperativo por consola bloqueante. No hay tareas periódicas propias ni ISR de aplicación. Ver `docs/temporal_model.md` y `docs/concurrency_model.md`.
 
 ## Threat model
 
-Debe documentarse en `docs/threat_model.md` dentro del laboratorio.
+Amenaza principal: usuario local con acceso a consola/monitor serie capaz de leer logs y ejecutar comandos. Ver `docs/threat_model.md`.
 
 ## Requisitos
 
-Debe documentarse en `docs/requirements.md` y `docs/security_requirements.md` dentro del laboratorio.
+Los requisitos están en:
+
+```text
+docs/requirements.md
+docs/security_requirements.md
+```
 
 ## Cómo compilar
 
-Pendiente de implementación.
+Desde la raíz del laboratorio:
+
+```powershell
+python tools/run_static_gates.py
+cd firmware
+idf.py set-target esp32s3
+idf.py build
+```
+
+Para seleccionar perfil:
+
+```powershell
+idf.py menuconfig
+```
+
+Ruta de configuración:
+
+```text
+Secure IoT LAB 01 → Active security profile
+```
 
 ## Cómo flashear
 
-Pendiente de implementación.
+Desde `firmware/`:
+
+```powershell
+idf.py -p COMx flash monitor
+```
+
+Sustituye `COMx` por el puerto USB Serial/JTAG detectado.
 
 ## Cómo probar
 
-Pendiente de implementación.
+Dentro del monitor:
+
+```text
+help
+get_config
+set_period 0
+set_period 10abc
+set_mqtt_password MiPasswordSuperSecreta123
+get_config
+factory_reset
+security_status
+```
+
+Secuencia completa en `test/manual_lab01_commands.txt`.
 
 ## Evidencias esperadas
 
-Las evidencias deben guardarse en `evidence/` y resumirse en `docs/audit_evidence.md`.
+```text
+evidence/lab01_insecure_console.log
+evidence/lab01_hardened_console.log
+evidence/lab01_static_gates.txt
+evidence/lab01_build_esp32s3.txt
+```
+
+Validación de logs:
+
+```powershell
+python tools/check_no_secrets_in_logs.py evidence/lab01_insecure_console.log --profile insecure
+python tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --profile hardened
+```
 
 ## Errores comunes
 
-Pendiente de completar durante el desarrollo del laboratorio.
+- Usar el puerto UART externo en vez del USB Serial/JTAG nativo.
+- Probar solo un perfil y considerar cerrado el laboratorio.
+- Usar una contraseña real en `set_mqtt_password`.
+- No guardar logs como evidencia.
+- Confundir `INSECURE` didáctico con firmware válido para producción.
 
 ## Ejercicios
 
-Pendiente de completar durante el desarrollo del laboratorio.
+1. Captura la fuga de `mqtt_password` en perfil `INSECURE`.
+2. Demuestra que `set_period 0` queda aceptado en `INSECURE`.
+3. Demuestra que `set_period 0` queda rechazado en `HARDENED`.
+4. Demuestra que `set_mqtt_password` no aparece en bruto en logs `HARDENED`.
+5. Añade un nuevo comando no sensible y comprueba que el scanner no da falsos positivos.
 
 ## Preguntas de repaso
 
-Pendiente de completar durante el desarrollo del laboratorio.
+1. ¿Por qué `get_config` puede ser una fuga de información?
+2. ¿Por qué loguear comandos brutos es peligroso?
+3. ¿Qué diferencia hay entre validar sintaxis y validar rango?
+4. ¿Por qué `factory_reset` debe tener política de autorización?
+5. ¿Qué evidencias mínimas cierran el LAB 01?
 
 ## Fuentes
 
-Cada laboratorio debe clasificar sus fuentes según la jerarquía definida en el estándar.
+Ver `docs/references.md` y la bibliografía global del repositorio.
 
 ## Estado
 
 ```text
 CUMPLE:
-- README del laboratorio creado con índice obligatorio.
+- README con índice obligatorio.
+- Firmware inicial añadido.
+- Documentación audit-grade del laboratorio añadida.
+- Gates estáticos del laboratorio añadidos.
 
 NO CUMPLE:
-- Laboratorio no implementado todavía.
+- No es firmware de producción.
+- No implementa red, TLS, OTA, Secure Boot ni Flash Encryption activa.
 
 NO VALIDADO:
-- Build y pruebas reales no ejecutadas.
+- Build ESP-IDF real pendiente en entorno del usuario.
+- Flash y pruebas en hardware pendientes.
+- Evidencias reales pendientes.
 
 PENDIENTE:
-- Implementación técnica.
-- Evidencias.
-- Documentación específica.
+- Ejecutar build en ESP32-S3.
+- Capturar logs INSECURE/HARDENED.
+- Actualizar docs/audit_evidence.md con resultados reales.
 ```

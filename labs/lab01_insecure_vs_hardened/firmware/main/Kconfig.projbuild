@@ -1,0 +1,26 @@
+menu "Secure IoT LAB 01"
+
+choice LAB01_SECURITY_PROFILE
+    prompt "Active security profile"
+    default LAB01_PROFILE_INSECURE
+    help
+        Select the active profile for the LAB 01 firmware.
+        INSECURE intentionally exposes controlled vulnerabilities for training.
+        HARDENED applies the mitigations required to close LAB 01.
+
+config LAB01_PROFILE_INSECURE
+    bool "INSECURE - vulnerable training profile"
+
+config LAB01_PROFILE_HARDENED
+    bool "HARDENED - mitigated training profile"
+
+endchoice
+
+config LAB01_CONSOLE_LINE_MAX
+    int "Maximum console command line length"
+    default 160
+    range 32 512
+    help
+        Maximum accepted command line length. Longer lines are drained and rejected.
+
+endmenu

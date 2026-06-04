@@ -3,19 +3,43 @@
 ## Índice
 
 - [Objetivo](#objetivo)
+- [Idea central](#idea-central)
+- [Qué se demuestra](#qué-se-demuestra)
+- [Relación con el laboratorio](#relación-con-el-laboratorio)
 - [Estado](#estado)
 
 ## Objetivo
 
-Capítulo asociado al LAB 01. Debe explicar la teoría y práctica de vulnerabilidades locales en firmware y su mitigación.
+Introducir la primera práctica de ciberseguridad embebida: comparar un firmware vulnerable de laboratorio con una variante endurecida que corrige las mismas debilidades.
+
+## Idea central
+
+Un microcontrolador no necesita estar conectado a Internet para tener superficie de ataque. Una consola local, logs verbosos, comandos de configuración y secretos mal tratados son suficientes para crear vulnerabilidades reales.
+
+## Qué se demuestra
+
+- Fuga de secretos por `get_config`.
+- Fuga de secretos por logs de comandos brutos.
+- Configuración inválida por parser débil.
+- Reset destructivo sin autorización.
+- Redacción y validación como mitigaciones básicas.
+
+## Relación con el laboratorio
+
+El firmware y las evidencias se encuentran en:
+
+```text
+labs/lab01_insecure_vs_hardened/
+```
+
+Este capítulo debe actualizarse con las evidencias reales cuando el laboratorio se ejecute en hardware.
 
 ## Estado
 
 ```text
-NO CUMPLE:
-- Capítulo no desarrollado todavía.
+CUMPLE:
+- Capítulo inicial alineado con LAB 01.
 
-PENDIENTE:
-- Implementar LAB 01.
-- Incorporar evidencias reales.
+NO VALIDADO:
+- Evidencias reales pendientes de incorporar.
 ```
