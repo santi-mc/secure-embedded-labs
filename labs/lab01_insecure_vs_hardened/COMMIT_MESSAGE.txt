@@ -1,0 +1,24 @@
+feat(lab01): añadir firmware inseguro/endurecido para ESP32-S3
+
+Añade el primer laboratorio funcional del repositorio público de
+ciberseguridad embebida.
+
+Incluye:
+- firmware ESP-IDF para ESP32-S3
+- arquitectura por componentes con HAL de consola y reloj
+- perfiles INSECURE y HARDENED seleccionables por Kconfig
+- comandos de laboratorio por USB Serial/JTAG
+- vulnerabilidades intencionadas de fuga de secretos, parser débil y reset expuesto
+- mitigaciones de redacción, validación estricta y bloqueo por política
+- documentación audit-grade del laboratorio
+- gates estáticos específicos del LAB 01
+- scanner de logs para evidenciar fugas en INSECURE y ausencia de fugas en HARDENED
+
+Validación realizada por el generador:
+- python tools/repo_quality_gates/run_static_repo_gates.py
+- python labs/lab01_insecure_vs_hardened/tools/run_static_gates.py
+
+Estado:
+- CUMPLE como implementación inicial audit-grade del LAB 01 a nivel estático.
+- NO VALIDADO en build ESP-IDF real dentro de este entorno.
+- NO CUMPLE como firmware de producción.

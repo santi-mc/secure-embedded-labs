@@ -1,0 +1,16 @@
+# LAB 01 manual command sequence
+# Execute these commands in `idf.py -p <COMx> monitor` after flashing each profile.
+
+help
+status
+security_status
+sample
+get_config
+set_period 0
+get_config
+set_period 10abc
+set_period 15
+set_mqtt_password MiPasswordSuperSecreta123
+get_config
+factory_reset
+get_config

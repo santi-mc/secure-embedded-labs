@@ -7,7 +7,7 @@
 
 ## Unreleased
 
-- Pendiente implementar LAB 01.
+- Añadido LAB 01 inicial: firmware inseguro/endurecido para ESP32-S3, documentación audit-grade y gates estáticos.
 
 ## 0.1.0
 
