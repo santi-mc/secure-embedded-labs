@@ -3,6 +3,7 @@
 #include "lab01_domain/interfaces.hpp"
 
 #include <cstddef>
+#include <string>
 
 namespace secure_lab {
 
@@ -14,8 +15,12 @@ public:
 
 private:
     std::size_t max_line_length_;
+    std::string pending_line_;
+    bool overflow_active_ = false;
+    bool swallow_next_lf_ = false;
 
-    static void drainUntilLineEnd() noexcept;
+    ConsoleReadStatus completeLine(std::string& line) noexcept;
+    static bool isLineTerminator(int character) noexcept;
 };
 
 }  // namespace secure_lab

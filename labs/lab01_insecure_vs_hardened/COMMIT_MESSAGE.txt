@@ -1,28 +1,31 @@
-fix(lab01): evitar spam de consola cuando stdin no tiene datos
+fix(lab01): acumular caracteres de consola hasta fin de línea
 
-Corrige el bucle de consola del LAB 01 para que la ausencia temporal de
-datos en stdin/USB Serial-JTAG no genere eventos `console_warning` de forma
-continua.
-
-Cambios principales:
-- añade el estado ConsoleReadStatus::NoData
-- diferencia ausencia de datos de línea válida o línea demasiado larga
-- aplica un backoff de 50 ms en la HAL de consola stdio
-- evita registrar warnings repetitivos en el bucle principal de comandos
-- mantiene los logs de errores reales de consola para estados inesperados
+Corrige la HAL de consola stdio del LAB 01 para que los caracteres
+recibidos por USB Serial/JTAG se acumulen hasta recibir CR/LF antes de
+entregarlos al parser de comandos.
 
 Motivo:
-En ESP-IDF/USB Serial-JTAG, fgets puede devolver nullptr cuando todavía no
-hay línea disponible. Tratarlo como EOF real provocaba un log cada iteración,
-haciendo inutilizable el monitor serie.
+En hardware real, la entrada stdio puede entregar caracteres parciales.
+La implementación anterior podía interpretar cada carácter de `help` como
+un comando independiente (`h`, `e`, `l`, `p`), haciendo que la consola
+interactiva no fuese usable aunque el spam de EOF estuviese corregido.
+
+Cambios principales:
+- sustituye la lectura por fgets por lectura incremental con getchar
+- añade buffer interno persistente de línea
+- acumula caracteres hasta CR/LF
+- soporta CRLF sin generar comando vacío adicional
+- conserva el estado NoData y el backoff cuando no hay datos
+- mantiene detección de línea demasiado larga
 
 Validación requerida:
 - python tools/repo_quality_gates/run_static_repo_gates.py
 - python labs/lab01_insecure_vs_hardened/tools/run_static_gates.py
 - idf.py build
 - idf.py flash monitor
+- prueba manual: escribir `help` debe generar un único comando `help`
 
 Estado:
-- CUMPLE como corrección de usabilidad/observabilidad del LAB 01.
-- NO VALIDADO en build ESP-IDF real dentro de este entorno.
+- CUMPLE como corrección funcional de consola si el build queda limpio y
+  la prueba manual confirma comandos completos.
 - NO CUMPLE como firmware de producción.

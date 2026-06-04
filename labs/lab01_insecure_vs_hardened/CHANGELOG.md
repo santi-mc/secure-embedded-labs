@@ -7,6 +7,7 @@
 
 ## Unreleased
 
+- Corregido el buffer de línea de la consola para no tratar cada carácter USB Serial/JTAG como comando independiente.
 - Corregido spam de `console_warning` cuando `stdin` no entrega una línea disponible todavía.
 - Pendiente capturar evidencia real en hardware ESP32-S3.
 
