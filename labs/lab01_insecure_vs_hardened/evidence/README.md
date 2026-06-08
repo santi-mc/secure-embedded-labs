@@ -1,29 +1,35 @@
-# LAB 01 — Evidencias
+# Evidencias LAB 01
 
 ## Índice
 
-- [Objetivo](#objetivo)
-- [Archivos esperados](#archivos-esperados)
-- [Estado](#estado)
+- [Prop?sito](#prop?sito)
+- [Evidencias incluidas](#evidencias-incluidas)
+- [Evidencias pendientes](#evidencias-pendientes)
+- [Criterio de auditor?a](#criterio-de-auditor?a)
 
-## Objetivo
+## Propósito
 
-Directorio reservado para evidencias capturadas en placa real durante el LAB 01.
+Este directorio contiene evidencias funcionales y de calidad asociadas al LAB 01.
 
-## Archivos esperados
+Las evidencias versionadas deben ser peque?as, legibles y reproducibles. No deben incluir secretos reales, credenciales privadas, tokens, claves, certificados privados ni datos de infraestructura sensible.
 
-```text
-lab01_insecure_console.log
-lab01_hardened_console.log
-lab01_static_gates.txt
-lab01_build_esp32s3.txt
-```
+## Evidencias incluidas
 
-Los ficheros de evidencia reales pueden versionarse cuando sean pequeños y no contengan secretos reales.
+| Fichero | Estado | Descripci?n |
+| --- | --- | --- |
+| `lab01_insecure_console.log` | CUMPLE | Evidencia funcional del perfil INSECURE en ESP32-S3. |
+| `lab01_hardened_console.log` | CUMPLE | Evidencia funcional del perfil HARDENED en ESP32-S3. |
+| `lab01_static_gates_reported.txt` | CUMPLE | Resultado reportado de gates est?ticos del repo y del LAB 01. |
 
-## Estado
+## Evidencias pendientes
 
-```text
-NO VALIDADO:
-- Evidencias reales pendientes de capturar en hardware.
-```
+| Evidencia | Estado | Motivo |
+| --- | --- | --- |
+| `lab01_build_esp32s3.txt` | PENDIENTE | Falta capturar stdout completo de `idf.py build`. |
+| `lab01_secret_scan.txt` | PENDIENTE | Falta capturar stdout real del scanner de secretos sobre logs. |
+
+## Criterio de auditoría
+
+Una evidencia solo debe marcarse como `CUMPLE` cuando exista salida real capturada o una observaci?n manual expl?cita y trazable.
+
+No se deben generar evidencias sint?ticas para simular builds, tests, gates o an?lisis de seguridad.

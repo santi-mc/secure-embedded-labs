@@ -1,0 +1,8 @@
+{"event":"boot","schema_version":1,"uptime_ms":14,"project":"secure_embedded_labs_lab01","fw_version":"0.1.0","lab":"LAB01","profile":"INSECURE","target":"esp32s3","console_transport":"usb_serial_jtag_stdio","build_gate":"not_executed_by_generator"}
+{"event":"console_start","schema_version":1,"uptime_ms":15,"profile":"INSECURE","transport":"usb_serial_jtag_stdio","line_policy":"max_length_enforced"}
+{"event":"command_received","schema_version":1,"uptime_ms":5059,"profile":"INSECURE","raw":"help"}
+{"event":"help","schema_version":1,"uptime_ms":5060,"profile":"INSECURE","commands":"help,status,security_status,sample,get_config,set_period <s>,set_mqtt_password <value>,factory_reset"}
+{"event":"command_received","schema_version":1,"uptime_ms":19058,"profile":"INSECURE","raw":"period"}
+{"event":"command_rejected","schema_version":1,"uptime_ms":19059,"profile":"INSECURE","cmd":"period","reason":"unknown_command"}
+{"event":"command_received","schema_version":1,"uptime_ms":33958,"profile":"INSECURE","raw":"set_period 25s"}
+{"event":"config_update_accepted","schema_version":1,"uptime_ms":33959,"profile":"INSECURE","field":"sample_period_s","value":"25"}

@@ -84,11 +84,15 @@ La documentación detallada está en `docs/architecture.md`.
 
 ## Modelo temporal
 
-Modelo event-driven cooperativo por consola bloqueante. No hay tareas periódicas propias ni ISR de aplicación. Ver `docs/temporal_model.md` y `docs/concurrency_model.md`.
+Modelo event-driven cooperativo por consola bloqueante. No hay tareas periódicas propias ni ISR de aplicación.
+
+Ver `docs/temporal_model.md` y `docs/concurrency_model.md`.
 
 ## Threat model
 
-Amenaza principal: usuario local con acceso a consola/monitor serie capaz de leer logs y ejecutar comandos. Ver `docs/threat_model.md`.
+Amenaza principal: usuario local con acceso a consola/monitor serie capaz de leer logs y ejecutar comandos.
+
+Ver `docs/threat_model.md`.
 
 ## Requisitos
 
@@ -151,11 +155,19 @@ Secuencia completa en `test/manual_lab01_commands.txt`.
 
 ## Evidencias esperadas
 
+Evidencias versionadas:
+
 ```text
 evidence/lab01_insecure_console.log
 evidence/lab01_hardened_console.log
-evidence/lab01_static_gates.txt
+evidence/lab01_static_gates_reported.txt
+```
+
+Evidencias aún pendientes para cierre completo audit-grade:
+
+```text
 evidence/lab01_build_esp32s3.txt
+evidence/lab01_secret_scan.txt
 ```
 
 Validación de logs:
@@ -172,14 +184,17 @@ python tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --p
 - Usar una contraseña real en `set_mqtt_password`.
 - No guardar logs como evidencia.
 - Confundir `INSECURE` didáctico con firmware válido para producción.
+- Ignorar avisos de checksum mismatch entre imagen compilada y flasheada.
+- Usar un HUB USB inestable durante la validación.
 
 ## Ejercicios
 
 1. Captura la fuga de `mqtt_password` en perfil `INSECURE`.
-2. Demuestra que `set_period 0` queda aceptado en `INSECURE`.
-3. Demuestra que `set_period 0` queda rechazado en `HARDENED`.
-4. Demuestra que `set_mqtt_password` no aparece en bruto en logs `HARDENED`.
-5. Añade un nuevo comando no sensible y comprueba que el scanner no da falsos positivos.
+2. Demuestra que `set_period 25s` queda aceptado en `INSECURE` por parsing débil.
+3. Demuestra que `set_period 25s` queda rechazado en `HARDENED`.
+4. Demuestra que `set_period 0` queda rechazado en `HARDENED`.
+5. Demuestra que `set_mqtt_password` no aparece en bruto en logs `HARDENED`.
+6. Añade un nuevo comando no sensible y comprueba que el scanner no da falsos positivos.
 
 ## Preguntas de repaso
 
@@ -198,21 +213,26 @@ Ver `docs/references.md` y la bibliografía global del repositorio.
 ```text
 CUMPLE:
 - README con índice obligatorio.
-- Firmware inicial añadido.
+- Firmware ESP-IDF para ESP32-S3 añadido.
 - Documentación audit-grade del laboratorio añadida.
 - Gates estáticos del laboratorio añadidos.
+- Consola USB Serial/JTAG validada en hardware.
+- Perfil INSECURE validado en hardware como demostración vulnerable.
+- Perfil HARDENED validado en hardware como mitigación.
+- Logs HARDENED redactan secretos.
+- factory_reset queda bloqueado en HARDENED.
+- Gates estáticos reportados como PASS por el operador.
 
 NO CUMPLE:
 - No es firmware de producción.
 - No implementa red, TLS, OTA, Secure Boot ni Flash Encryption activa.
 
 NO VALIDADO:
-- Build ESP-IDF real pendiente en entorno del usuario.
-- Flash y pruebas en hardware pendientes.
-- Evidencias reales pendientes.
+- Build completo con cero warnings pendiente de evidencia stdout versionada.
+- Scanner de secretos pendiente de evidencia stdout versionada.
 
 PENDIENTE:
-- Ejecutar build en ESP32-S3.
-- Capturar logs INSECURE/HARDENED.
-- Actualizar docs/audit_evidence.md con resultados reales.
+- Capturar `idf.py build` completo en `evidence/lab01_build_esp32s3.txt`.
+- Capturar scanner de secretos en `evidence/lab01_secret_scan.txt`.
+- Revisar CI tras push.
 ```

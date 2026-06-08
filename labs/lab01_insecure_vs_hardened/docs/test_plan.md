@@ -3,53 +3,64 @@
 ## Índice
 
 - [Objetivo](#objetivo)
-- [Gates estáticos](#gates-estáticos)
-- [Build](#build)
-- [Pruebas manuales](#pruebas-manuales)
-- [Validación de logs](#validación-de-logs)
-- [Estado](#estado)
+- [Pruebas funcionales](#pruebas-funcionales)
+- [Pruebas de seguridad](#pruebas-de-seguridad)
+- [Pruebas de regresión](#pruebas-de-regresión)
+- [Gates](#gates)
+- [Criterio de cierre](#criterio-de-cierre)
 
 ## Objetivo
 
-Definir cómo cerrar el LAB 01 con evidencias.
+Definir las pruebas mínimas para demostrar el contraste entre el perfil `INSECURE` y el perfil `HARDENED` del LAB 01.
 
-## Gates estáticos
+## Pruebas funcionales
+
+| ID | Perfil | Comando | Resultado esperado | Evidencia | Estado |
+|---|---|---|---|---|---|
+| TP-F-001 | INSECURE | `help` | Respuesta de ayuda | `lab01_insecure_console.log` | CUMPLE |
+| TP-F-002 | HARDENED | `help` | Respuesta de ayuda | `lab01_hardened_console.log` | CUMPLE |
+| TP-F-003 | HARDENED | `set_period 60` | Actualización aceptada | `lab01_hardened_console.log` | CUMPLE |
+
+## Pruebas de seguridad
+
+| ID | Perfil | Comando | Resultado esperado | Evidencia | Estado |
+|---|---|---|---|---|---|
+| TP-S-001 | INSECURE | `set_period 25s` | Aceptado como vulnerabilidad intencionada | `lab01_insecure_console.log` | CUMPLE |
+| TP-S-002 | HARDENED | `set_period 25s` | Rechazado por sintaxis | `lab01_hardened_console.log` | CUMPLE |
+| TP-S-003 | HARDENED | `set_period 0` | Rechazado por rango | `lab01_hardened_console.log` | CUMPLE |
+| TP-S-004 | HARDENED | `set_mqtt_password test123` | Secreto redactado | `lab01_hardened_console.log` | CUMPLE |
+| TP-S-005 | HARDENED | `get_config` | `mqtt_password` redactado | `lab01_hardened_console.log` | CUMPLE |
+| TP-S-006 | HARDENED | `factory_reset` | Rechazado por política | `lab01_hardened_console.log` | CUMPLE |
+
+## Pruebas de regresión
+
+| ID | Incidencia | Resultado esperado | Estado |
+|---|---|---|---|
+| TP-R-001 | Spam `stdin_eof` | El monitor no se satura sin datos | CUMPLE |
+| TP-R-002 | Lectura carácter a carácter | `help` se procesa como una única línea | CUMPLE |
+| TP-R-003 | Checksum mismatch | No validar perfil si la imagen flasheada no coincide | Documentado |
+| TP-R-004 | HUB USB inestable | Clasificar como incidencia externa, no firmware | Documentado |
+
+## Gates
 
 ```powershell
+python tools/repo_quality_gates/run_static_repo_gates.py
 python labs/lab01_insecure_vs_hardened/tools/run_static_gates.py
 ```
 
-## Build
-
-Desde `labs/lab01_insecure_vs_hardened/firmware`:
-
-```powershell
-idf.py set-target esp32s3
-idf.py build
-```
-
-## Pruebas manuales
-
-Ejecutar los comandos de `test/manual_lab01_commands.txt` en dos builds:
+## Criterio de cierre
 
 ```text
-INSECURE
-HARDENED
-```
+CUMPLE funcionalmente si:
+- INSECURE reproduce vulnerabilidad didáctica.
+- HARDENED mitiga las vulnerabilidades del alcance.
+- No hay spam de consola.
+- Los comandos llegan como líneas completas.
+- Los secretos quedan redactados en HARDENED.
+- factory_reset queda bloqueado en HARDENED.
 
-## Validación de logs
-
-```powershell
-python labs/lab01_insecure_vs_hardened/tools/check_no_secrets_in_logs.py evidence/lab01_insecure_console.log --profile insecure
-python labs/lab01_insecure_vs_hardened/tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --profile hardened
-```
-
-## Estado
-
-```text
-CUMPLE:
-- Plan de pruebas definido.
-
-NO VALIDADO:
-- Pruebas reales pendientes.
+NO VALIDADO audit-grade completo hasta:
+- Adjuntar stdout completo de build ESP-IDF.
+- Adjuntar stdout completo del scanner de secretos.
+- Registrar versión ESP-IDF/toolchain.
 ```

@@ -4,8 +4,8 @@ Repositorio público de laboratorios auditables para aprender ciberseguridad apl
 
 El proyecto combina dos objetivos:
 
-1. **Aprendizaje técnico**: comprender seguridad en firmware mediante laboratorios reproducibles sobre microcontroladores reales.
-2. **Conocimiento abierto**: construir una base pública reutilizable que pueda evolucionar hacia documentación extensa o un libro con licencia abierta.
+1. **Aprendizaje técnico:** comprender seguridad en firmware mediante laboratorios reproducibles sobre microcontroladores reales.
+2. **Conocimiento abierto:** construir una base pública reutilizable que pueda evolucionar hacia documentación extensa o un libro con licencia abierta.
 
 > Un laboratorio puede ser inseguro de forma intencionada; nunca puede ser precario por descuido.
 
@@ -47,7 +47,7 @@ Todo laboratorio debe cumplir el estándar permanente de diseño embebido audit-
 - QA gates estrictos;
 - cero warnings;
 - documentación audit-grade;
-- transparencia `CUMPLE / NO CUMPLE / NO VALIDADO`.
+- transparencia `CUMPLE / NO CUMPLE / NO VALIDADO / PENDIENTE`.
 
 El estándar completo está en:
 
@@ -71,7 +71,7 @@ secure-embedded-labs/
 
 | Lab | Tema | Estado |
 |---:|---|---|
-| 01 | Firmware inseguro vs firmware endurecido | Pendiente |
+| 01 | Firmware inseguro vs firmware endurecido | Validado localmente en ESP32-S3 |
 | 02 | Identidad única de dispositivo | Pendiente |
 | 03 | MQTT seguro con TLS | Pendiente |
 | 04 | OTA firmada con rollback | Pendiente |
@@ -102,7 +102,7 @@ PENDIENTE:
 
 ## Licencias
 
-- Código fuente, scripts y firmware: **Apache-2.0**. Véase `LICENSE-CODE`.
+- Código fuente, scripts y firmware: **Apache-2.0**. Véase `LICENSE-CODE` y `LICENSE`.
 - Documentación, texto educativo, figuras propias y futuro material de libro: **CC BY-SA 4.0**. Véase `LICENSE-DOCS`.
 
 Los datasheets, normas, libros, artículos y documentos de terceros no se redistribuirán salvo permiso explícito. Se citarán o enlazarán según corresponda.
@@ -111,25 +111,26 @@ Los datasheets, normas, libros, artículos y documentos de terceros no se redist
 
 ```text
 CUMPLE:
-- Estructura base de repositorio público.
+- Repositorio público estructurado.
 - Estándar audit-grade incluido.
 - Readme principal con índice.
-- Plantillas iniciales de laboratorios.
 - Gates estáticos de estructura incluidos.
+- LAB 01 implementado con firmware ESP-IDF para ESP32-S3.
+- LAB 01 validado localmente en hardware en perfiles INSECURE y HARDENED.
+- Evidencias funcionales de consola añadidas para LAB 01.
 
 NO CUMPLE:
-- No contiene todavía firmware de laboratorio.
-- No contiene todavía evidencias reales.
 - No contiene todavía capítulos completos de libro.
+- Los laboratorios posteriores al LAB 01 aún no están implementados.
 
 NO VALIDADO:
-- Build ESP-IDF, porque aún no hay firmware en esta base.
-- CI real en GitHub, porque debe ejecutarse tras publicar el repositorio.
+- Build completo con cero warnings no queda cerrado hasta versionar stdout completo de `idf.py build`.
+- CI real en GitHub queda pendiente de revisar tras cada push.
 
 PENDIENTE:
-- Implementar LAB 01.
-- Definir nombre definitivo del repositorio si se desea cambiar.
-- Revisar licencias antes de publicación formal.
+- Capturar evidencia formal de build ESP-IDF completo.
+- Capturar evidencia formal del scanner de secretos.
+- Implementar LAB 02.
 ```
 
 ## Cómo contribuir

@@ -1,0 +1,17 @@
+I (127) main_task: Calling app_main()
+{"event":"boot","schema_version":1,"uptime_ms":14,"project":"secure_embedded_labs_lab01","fw_version":"0.1.0","lab":"LAB01","profile":"HARDENED","target":"esp32s3","console_transport":"usb_serial_jtag_stdio","build_gate":"not_executed_by_generator"}
+{"event":"console_start","schema_version":1,"uptime_ms":15,"profile":"HARDENED","transport":"usb_serial_jtag_stdio","line_policy":"max_length_enforced"}
+{"event":"command_received","schema_version":1,"uptime_ms":22859,"profile":"HARDENED","cmd":"help"}
+{"event":"help","schema_version":1,"uptime_ms":22860,"profile":"HARDENED","commands":"help,status,security_status,sample,get_config,set_period <s>,set_mqtt_password <value>,factory_reset"}
+{"event":"command_received","schema_version":1,"uptime_ms":36408,"profile":"HARDENED","cmd":"set_period"}
+{"event":"config_update_rejected","schema_version":1,"uptime_ms":36409,"profile":"HARDENED","field":"sample_period_s","reason":"invalid_uint32"}
+{"event":"command_received","schema_version":1,"uptime_ms":49508,"profile":"HARDENED","cmd":"set_period"}
+{"event":"config_update_rejected","schema_version":1,"uptime_ms":49509,"profile":"HARDENED","field":"sample_period_s","value":"0","reason":"out_of_range"}
+{"event":"command_received","schema_version":1,"uptime_ms":58058,"profile":"HARDENED","cmd":"set_period"}
+{"event":"config_update_accepted","schema_version":1,"uptime_ms":58059,"profile":"HARDENED","field":"sample_period_s","value":"60"}
+{"event":"command_received","schema_version":1,"uptime_ms":70258,"profile":"HARDENED","cmd":"set_mqtt_password","args":"<redacted>"}
+{"event":"secret_updated","schema_version":1,"uptime_ms":70259,"profile":"HARDENED","field":"mqtt_password","value":"<redacted>"}
+{"event":"command_received","schema_version":1,"uptime_ms":84008,"profile":"HARDENED","cmd":"get_config"}
+{"event":"config_dump","schema_version":1,"uptime_ms":84009,"profile":"HARDENED","device_id":"LAB01-UNPROVISIONED","sample_period_s":"60","mqtt_host":"mqtt.example.invalid","mqtt_port":"8883","mqtt_username":"lab_user","mqtt_password":"<redacted>"}
+{"event":"command_received","schema_version":1,"uptime_ms":95058,"profile":"HARDENED","cmd":"factory_reset"}
+{"event":"command_rejected","schema_version":1,"uptime_ms":95059,"profile":"HARDENED","cmd":"factory_reset","reason":"rejected_by_policy"}

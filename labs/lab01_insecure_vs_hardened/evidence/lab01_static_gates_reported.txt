@@ -1,0 +1,14 @@
+# LAB 01 — Static gates evidence
+
+Estado: CUMPLE con limitación.
+
+El operador reportó que los siguientes comandos pasaron correctamente tras validar el firmware en hardware:
+
+```powershell
+python tools/repo_quality_gates/run_static_repo_gates.py
+python labs/lab01_insecure_vs_hardened/tools/run_static_gates.py
+```
+
+Limitación:
+- Este archivo no es stdout raw capturado automáticamente.
+- Sustituir o complementar por salida completa cuando se cierre la evidencia formal.
