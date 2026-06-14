@@ -1,0 +1,12 @@
+# LAB 02 manual command sequence
+# Execute first with INSECURE profile, then with HARDENED profile.
+
+help
+identity_status
+get_identity
+get_claim
+set_device_id LAB02-CLONED-ID
+identity_status
+get_identity
+get_claim
+security_status

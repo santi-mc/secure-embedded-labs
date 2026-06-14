@@ -1,0 +1,22 @@
+menu "Secure IoT LAB 02"
+
+    choice LAB02_ACTIVE_PROFILE
+        prompt "Active identity profile"
+        default LAB02_PROFILE_INSECURE
+        help
+            Selects whether the lab demonstrates the intentionally vulnerable
+            identity model or the hardened identity model.
+
+        config LAB02_PROFILE_INSECURE
+            bool "INSECURE - intentionally cloneable training profile"
+
+        config LAB02_PROFILE_HARDENED
+            bool "HARDENED - derived non-secret identity training profile"
+    endchoice
+
+    config LAB02_CONSOLE_LINE_MAX
+        int "Maximum console line length"
+        range 32 256
+        default 128
+
+endmenu

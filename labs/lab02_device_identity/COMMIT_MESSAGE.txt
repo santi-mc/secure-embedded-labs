@@ -1,0 +1,22 @@
+feat(lab02): añadir laboratorio de identidad única de dispositivo
+
+Añade el LAB 02 centrado en identidad técnica de dispositivo para ESP32-S3.
+
+Incluye:
+- Firmware ESP-IDF por componentes.
+- Perfiles INSECURE y HARDENED por Kconfig.
+- Identidad clonable y editable en INSECURE.
+- Identidad derivada desde fuente hardware en HARDENED.
+- Redacción de raw MAC y eliminación de tokens en HARDENED.
+- Consola USB Serial/JTAG con lectura por línea.
+- Documentación audit-grade.
+- Gates estáticos y scanner de logs.
+
+Validación:
+- python tools/repo_quality_gates/run_static_repo_gates.py
+- python labs/lab02_device_identity/tools/run_static_gates.py
+
+NO VALIDADO:
+- Build real ESP-IDF pendiente.
+- Flash en ESP32-S3 pendiente.
+- Evidencias INSECURE/HARDENED pendientes.
