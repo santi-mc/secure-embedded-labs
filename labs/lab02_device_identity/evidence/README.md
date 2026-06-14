@@ -1,66 +1,47 @@
-# Evidencias LAB 02
+# LAB 02 — Evidencias
 
 ## Índice
 
-- [Propósito](#propósito)
-- [Evidencias esperadas](#evidencias-esperadas)
-- [Captura automática](#captura-automática)
-- [Validación de logs](#validación-de-logs)
+- [Objetivo](#objetivo)
+- [Evidencias versionadas](#evidencias-versionadas)
+- [Evidencias pendientes](#evidencias-pendientes)
 - [Criterio de auditoría](#criterio-de-auditoría)
 - [Estado](#estado)
 
-## Propósito
+## Objetivo
 
-Este directorio contiene evidencias funcionales y de calidad asociadas al LAB 02.
+Este directorio contiene evidencias capturadas en placa real durante el LAB 02.
 
-Las evidencias versionadas deben ser pequeñas, legibles y reproducibles. No deben incluir secretos reales, credenciales privadas, tokens, claves, certificados privados ni datos de infraestructura sensible.
+Las evidencias demuestran el contraste entre identidad clonable/mutable en `INSECURE` e identidad derivada/no mutable en `HARDENED`.
 
-## Evidencias esperadas
+## Evidencias versionadas
 
 | Fichero | Estado | Descripción |
 | --- | --- | --- |
-| `lab02_insecure_console.log` | PENDIENTE | Evidencia funcional del perfil INSECURE. |
-| `lab02_hardened_console.log` | PENDIENTE | Evidencia funcional del perfil HARDENED. |
-| `lab02_static_gates.txt` | PENDIENTE | Salida de gates estáticos. |
-| `lab02_build_esp32s3.txt` | PENDIENTE | Salida completa de build ESP32-S3. |
+| `lab02_insecure_console.log` | CUMPLE | Evidencia del perfil INSECURE con identidad mutable y claim clonable. |
+| `lab02_hardened_console.log` | CUMPLE | Evidencia del perfil HARDENED con identidad derivada, raw hardware ID redactado y `set_device_id` rechazado. |
+| `lab02_static_gates.txt` | CUMPLE | Evidencia de gates estáticos globales y del LAB 02. |
 
-## Captura automática
+## Evidencias pendientes
 
-Desde la raíz del repositorio:
-
-```powershell
-python labs/lab02_device_identity/tools/capture_console_evidence.py `
-  --port COMx `
-  --profile insecure `
-  --output labs/lab02_device_identity/evidence/lab02_insecure_console.log
-
-python labs/lab02_device_identity/tools/capture_console_evidence.py `
-  --port COMx `
-  --profile hardened `
-  --output labs/lab02_device_identity/evidence/lab02_hardened_console.log
-
-python labs/lab02_device_identity/tools/capture_static_gates.py
-```
-
-## Validación de logs
-
-```powershell
-python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_insecure_console.log --profile insecure
-python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_hardened_console.log --profile hardened
-```
+| Fichero | Estado | Motivo |
+| --- | --- | --- |
+| `lab02_build_esp32s3.txt` | PENDIENTE | Falta capturar stdout completo de `idf.py build` con cero warnings. |
 
 ## Criterio de auditoría
 
-No se deben versionar evidencias sintéticas. Cada fichero debe proceder de una ejecución real o estar marcado explícitamente como pendiente.
+`INSECURE` debe demostrar la vulnerabilidad intencionada. `HARDENED` debe demostrar que el identificador no es mutable por consola y que no se exponen identificadores brutos.
 
-El script de captura añade líneas de comentario `# tx ...` para trazar comandos transmitidos. El scanner ignora líneas no JSON y valida únicamente eventos emitidos por el firmware.
+Los logs deben incluir `capture_validation result=PASS` cuando han sido capturados por el script automático.
 
 ## Estado
 
 ```text
 CUMPLE:
-- Documentado flujo automático de captura.
+- Evidencias funcionales INSECURE/HARDENED capturadas.
+- Validadores de identidad ejecutados con PASS.
+- Gates estáticos capturados con PASS.
 
-PENDIENTE:
-- Capturar evidencias reales generadas por script.
+NO VALIDADO:
+- Build completo con stdout y cero warnings pendiente de evidencia versionada.
 ```

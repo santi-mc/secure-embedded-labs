@@ -1,83 +1,59 @@
-# Plan de pruebas LAB 02
+# LAB 02 — Plan de pruebas
 
 ## Índice
 
 - [Objetivo](#objetivo)
 - [Pruebas INSECURE](#pruebas-insecure)
 - [Pruebas HARDENED](#pruebas-hardened)
-- [Captura automática](#captura-automática)
-- [Gates](#gates)
+- [Pruebas de gates](#pruebas-de-gates)
+- [Pruebas pendientes](#pruebas-pendientes)
 - [Estado](#estado)
 
 ## Objetivo
 
-Definir pruebas mínimas para validar el comportamiento didáctico del LAB 02.
+Definir las pruebas necesarias para cerrar el LAB 02 con evidencias auditables.
 
 ## Pruebas INSECURE
 
-```text
-[ ] Arranca con profile=INSECURE.
-[ ] get_identity muestra device_id clonable.
-[ ] get_claim expone token compartido de laboratorio.
-[ ] set_device_id acepta un ID arbitrario.
-[ ] get_identity confirma el ID modificado.
-```
+| Prueba | Estado | Evidencia |
+| --- | --- | --- |
+| Boot INSECURE | CUMPLE | `evidence/lab02_insecure_console.log` |
+| `identity_status` muestra identidad mutable | CUMPLE | `evidence/lab02_insecure_console.log` |
+| `set_device_id CLONED-DEVICE-001` aceptado | CUMPLE | `evidence/lab02_insecure_console.log` |
+| `get_claim` emite claim clonable | CUMPLE | `evidence/lab02_insecure_console.log` |
 
 ## Pruebas HARDENED
 
-```text
-[ ] Arranca con profile=HARDENED.
-[ ] get_identity muestra device_id derivado.
-[ ] raw_hardware_id aparece como <redacted>.
-[ ] get_claim no incluye token ni secreto.
-[ ] set_device_id queda rechazado por política.
-[ ] get_identity posterior confirma que el ID no cambia.
-```
+| Prueba | Estado | Evidencia |
+| --- | --- | --- |
+| Boot HARDENED | CUMPLE | `evidence/lab02_hardened_console.log` |
+| `identity_status` muestra identidad derivada | CUMPLE | `evidence/lab02_hardened_console.log` |
+| `raw_hardware_id` aparece redactado | CUMPLE | `evidence/lab02_hardened_console.log` |
+| `set_device_id` rechazado | CUMPLE | `evidence/lab02_hardened_console.log` |
+| `get_claim` no expone token secreto | CUMPLE | `evidence/lab02_hardened_console.log` |
 
-## Captura automática
+## Pruebas de gates
 
-Captura INSECURE:
+| Prueba | Estado | Evidencia |
+| --- | --- | --- |
+| Gate global del repo | CUMPLE | `evidence/lab02_static_gates.txt` |
+| Gate estático LAB 02 | CUMPLE | `evidence/lab02_static_gates.txt` |
+| Validador de logs INSECURE | CUMPLE | `evidence/lab02_insecure_console.log` |
+| Validador de logs HARDENED | CUMPLE | `evidence/lab02_hardened_console.log` |
 
-```powershell
-python labs/lab02_device_identity/tools/capture_console_evidence.py `
-  --port COMx `
-  --profile insecure `
-  --output labs/lab02_device_identity/evidence/lab02_insecure_console.log
-```
+## Pruebas pendientes
 
-Captura HARDENED:
-
-```powershell
-python labs/lab02_device_identity/tools/capture_console_evidence.py `
-  --port COMx `
-  --profile hardened `
-  --output labs/lab02_device_identity/evidence/lab02_hardened_console.log
-```
-
-Validación:
-
-```powershell
-python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_insecure_console.log --profile insecure
-python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_hardened_console.log --profile hardened
-```
-
-## Gates
-
-```text
-[ ] python tools/repo_quality_gates/run_static_repo_gates.py
-[ ] python labs/lab02_device_identity/tools/run_static_gates.py
-[ ] python labs/lab02_device_identity/tools/capture_static_gates.py
-[ ] idf.py build sin warnings
-```
+| Prueba | Estado | Motivo |
+| --- | --- | --- |
+| Build completo con stdout | PENDIENTE | Falta `evidence/lab02_build_esp32s3.txt`. |
 
 ## Estado
 
 ```text
 CUMPLE:
-- Plan actualizado con captura automática.
-- Validación manual INSECURE/HARDENED realizada por el operador.
+- Pruebas funcionales INSECURE/HARDENED validadas.
+- Gates estáticos capturados con PASS.
 
-PENDIENTE:
-- Generar evidencias automáticas.
-- Capturar build completo.
+NO VALIDADO:
+- Build completo con stdout versionado.
 ```

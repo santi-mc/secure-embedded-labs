@@ -1,47 +1,48 @@
-# Evidencias LAB 01
+# LAB 01 — Evidencias
 
 ## Índice
 
-- [Propósito](#propósito)
-- [Evidencias incluidas](#evidencias-incluidas)
+- [Objetivo](#objetivo)
+- [Evidencias versionadas](#evidencias-versionadas)
 - [Evidencias pendientes](#evidencias-pendientes)
-- [Captura automática](#captura-automática)
 - [Criterio de auditoría](#criterio-de-auditoría)
+- [Estado](#estado)
 
-## Propósito
+## Objetivo
 
-Este directorio contiene evidencias funcionales y de calidad asociadas al LAB 01.
+Este directorio contiene evidencias capturadas en placa real durante el LAB 01.
 
-Las evidencias versionadas deben ser pequeñas, legibles y reproducibles. No deben incluir secretos reales, credenciales privadas, tokens, claves, certificados privados ni datos de infraestructura sensible.
+Las evidencias deben ser pequeñas, legibles, reproducibles y no contener secretos reales.
 
-## Evidencias incluidas
+## Evidencias versionadas
 
 | Fichero | Estado | Descripción |
 | --- | --- | --- |
-| `lab01_insecure_console.log` | CUMPLE si `capture_validation result=PASS` | Evidencia funcional del perfil INSECURE en ESP32-S3. |
-| `lab01_hardened_console.log` | CUMPLE si `capture_validation result=PASS` | Evidencia funcional del perfil HARDENED en ESP32-S3. |
-| `lab01_static_gates.txt` | CUMPLE si `capture_validation result=PASS` | Resultado raw de gates estáticos del repo y del LAB 01. |
-| `lab01_secret_scan.txt` | CUMPLE si `capture_validation result=PASS` | Resultado raw del scanner de secretos sobre logs INSECURE/HARDENED. |
+| `lab01_insecure_console.log` | CUMPLE | Evidencia del perfil INSECURE demostrando la fuga didáctica de secreto. |
+| `lab01_hardened_console.log` | CUMPLE | Evidencia del perfil HARDENED con redacción de secretos. |
+| `lab01_secret_scan.txt` | CUMPLE | Evidencia del scanner de secretos sobre logs INSECURE/HARDENED. |
+| `lab01_static_gates.txt` | CUMPLE | Evidencia de gates estáticos globales y del LAB 01. |
 
 ## Evidencias pendientes
 
-| Evidencia | Estado | Motivo |
+| Fichero | Estado | Motivo |
 | --- | --- | --- |
-| `lab01_build_esp32s3.txt` | PENDIENTE | Falta capturar stdout completo de `idf.py build`. |
-
-## Captura automática
-
-Desde la raíz del repositorio:
-
-```powershell
-python labs\lab01_insecure_vs_hardened\tools\capture_console_evidence.py --port COMx --profile insecure --output labs\lab01_insecure_vs_hardened\evidence\lab01_insecure_console.log
-python labs\lab01_insecure_vs_hardened\tools\capture_console_evidence.py --port COMx --profile hardened --output labs\lab01_insecure_vs_hardened\evidence\lab01_hardened_console.log
-python labs\lab01_insecure_vs_hardened\tools\capture_static_gates.py
-python labs\lab01_insecure_vs_hardened\tools\capture_secret_scan.py
-```
+| `lab01_build_esp32s3.txt` | PENDIENTE | Falta capturar stdout completo de `idf.py build` con cero warnings. |
 
 ## Criterio de auditoría
 
-Una evidencia solo debe marcarse como `CUMPLE` cuando exista salida real capturada o una observación manual explícita y trazable.
+`INSECURE` debe demostrar la vulnerabilidad intencionada. `HARDENED` debe demostrar que los secretos no aparecen en bruto.
 
-No se deben generar evidencias sintéticas para simular builds, tests, gates o análisis de seguridad.
+No se deben editar manualmente logs para forzar un resultado `PASS`.
+
+## Estado
+
+```text
+CUMPLE:
+- Evidencias funcionales INSECURE/HARDENED capturadas.
+- Secret scan capturado con PASS.
+- Gates estáticos capturados con PASS.
+
+NO VALIDADO:
+- Build completo con stdout y cero warnings pendiente de evidencia versionada.
+```

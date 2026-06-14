@@ -18,7 +18,7 @@ REQUIRED_FILES = [
     "SECURITY.md",
     "DISCLAIMER.md",
     "CHANGELOG.md",
-    "LICENSE-CODE",
+    "LICENSE",
     "LICENSE-DOCS",
     "standard/estandar_diseno_embebido_audit_grade.md",
     "labs/README.md",

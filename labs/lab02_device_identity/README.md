@@ -18,7 +18,6 @@
 - [Cómo compilar](#cómo-compilar)
 - [Cómo flashear](#cómo-flashear)
 - [Cómo probar](#cómo-probar)
-- [Captura automática de evidencias](#captura-automática-de-evidencias)
 - [Evidencias esperadas](#evidencias-esperadas)
 - [Errores comunes](#errores-comunes)
 - [Ejercicios](#ejercicios)
@@ -28,39 +27,39 @@
 
 ## Objetivo
 
-Demostrar por qué la identidad de dispositivo no debe ser un identificador hardcodeado, clonado o editable por consola, y cómo generar una identidad pública estable a partir de una fuente de identidad hardware sin exponer datos sensibles ni confundir identidad con autenticación.
+Demostrar por qué una identidad de dispositivo no debe ser hardcoded, clonable ni mutable por consola, y cómo derivar un identificador estable desde material de hardware sin exponer identificadores brutos.
 
 ## Objetivos de aprendizaje
 
-- Diferenciar identidad pública, autenticación y secretos.
-- Detectar el riesgo de usar IDs hardcodeados o compartidos entre dispositivos.
-- Detectar el riesgo de exponer MAC/eFuse en logs operativos.
-- Comparar identidad clonable `INSECURE` frente a identidad derivada `HARDENED`.
-- Diseñar logs de identidad sin secretos y con trazabilidad.
-- Validar evidencias de consola y gates estáticos.
-- Automatizar la captura de evidencias sin editar logs manualmente.
+- Diferenciar identificador público, identidad local y autenticación.
+- Observar el riesgo de identidades clonables.
+- Observar el riesgo de comandos `set_device_id` sin política.
+- Comparar identidad hardcoded frente a identidad derivada de eFuse MAC + SHA-256 truncado.
+- Entender que un identificador no es un secreto ni sustituye autenticación.
+- Capturar evidencias INSECURE/HARDENED automatizadas.
 
 ## Prerrequisitos
 
 - ESP-IDF instalado.
-- Conocimientos básicos de C++ embebido.
+- ESP32-S3 con USB Serial/JTAG operativo.
+- Python 3 con `pyserial` para captura automática.
 - Lectura del estándar `standard/estandar_diseno_embebido_audit_grade.md`.
-- Haber completado o leído el LAB 01.
 
 ## Alcance
 
-Este laboratorio cubre identidad local de dispositivo en ESP32-S3 usando consola USB Serial/JTAG, eFuse MAC como fuente hardware no secreta y derivación local de un `device_id` público estable.
+Este laboratorio cubre identidad local de dispositivo, exposición de identificadores, mutabilidad por consola y claims didácticos.
 
 ## Fuera de alcance
 
 ```text
-- Provisioning PKI real
-- Certificados cliente TLS
-- Secure Element
-- NVS cifrada
-- Attestation remota real
-- Alta de dispositivos en backend
-- Producción
+- Certificados X.509 reales.
+- Secure element.
+- TLS mutuo.
+- Provisioning industrial.
+- NVS segura.
+- Secure Boot activo.
+- Flash Encryption activa.
+- Producción.
 ```
 
 ## Hardware requerido
@@ -72,12 +71,8 @@ Este laboratorio cubre identidad local de dispositivo en ESP32-S3 usando consola
 
 - ESP-IDF compatible con ESP32-S3.
 - Python 3.
+- pyserial.
 - Git.
-- `pyserial` para captura automática de consola:
-
-```powershell
-python -m pip install pyserial
-```
 
 ## Arquitectura prevista
 
@@ -87,29 +82,17 @@ El firmware está en `firmware/` y usa arquitectura por componentes:
 main → app_core → command_console/identity_service/security_status/secure_log/board_hal
 ```
 
-Componentes principales:
-
-```text
-lab02_domain      → contratos, perfiles, interfaces y versión
-board_hal         → reloj, consola stdio y fuente de identidad hardware
-identity_service  → política de identidad INSECURE/HARDENED
-command_console   → comandos de laboratorio
-secure_log        → logs JSON/NDJSON sin secretos en HARDENED
-security_status   → estado de seguridad del target
-app_core          → composición de aplicación
-```
-
-Ver `docs/architecture.md`.
+La documentación detallada está en `docs/architecture.md`.
 
 ## Modelo temporal
 
-Modelo event-driven cooperativo por consola bloqueante con backoff cuando no hay datos. No hay tareas periódicas propias ni ISR de aplicación.
+Modelo event-driven cooperativo por consola. No hay tareas periódicas propias ni ISR de aplicación.
 
 Ver `docs/temporal_model.md` y `docs/concurrency_model.md`.
 
 ## Threat model
 
-Amenaza principal: operador local o atacante con acceso a consola capaz de leer identidad, copiar claims, modificar IDs o recopilar identificadores hardware.
+Amenaza principal: usuario local con acceso a consola capaz de leer identidad, clonar identificadores o intentar modificar el `device_id`.
 
 Ver `docs/threat_model.md`.
 
@@ -157,122 +140,72 @@ Sustituye `COMx` por el puerto USB Serial/JTAG detectado.
 
 ## Cómo probar
 
-Dentro del monitor:
+Comandos disponibles:
 
 ```text
 help
 identity_status
 get_identity
 get_claim
-set_device_id LAB02-CLONED-ID
+set_device_id CLONED-DEVICE-001
 security_status
 ```
 
-Secuencia completa en `test/manual_lab02_commands.txt`.
-
-## Captura automática de evidencias
-
-La captura automática se hace con `tools/capture_console_evidence.py`. El script no cambia el perfil, no compila y no flashea: primero hay que cargar el firmware con el perfil correspondiente.
-
-### Capturar INSECURE
-
-1. Selecciona `INSECURE` en `idf.py menuconfig`.
-2. Compila y flashea.
-3. Ejecuta desde la raíz del repo:
+Captura automática desde la raíz del repo:
 
 ```powershell
-python labs/lab02_device_identity/tools/capture_console_evidence.py `
-  --port COMx `
-  --profile insecure `
-  --output labs/lab02_device_identity/evidence/lab02_insecure_console.log
+python labs\lab02_device_identity\tools\capture_console_evidence.py --port COMx --profile insecure --output labs\lab02_device_identity\evidence\lab02_insecure_console.log
+python labs\lab02_device_identity\tools\capture_console_evidence.py --port COMx --profile hardened --output labs\lab02_device_identity\evidence\lab02_hardened_console.log
+python labs\lab02_device_identity\tools\capture_static_gates.py
 ```
 
-### Capturar HARDENED
-
-1. Selecciona `HARDENED` en `idf.py menuconfig`.
-2. Compila y flashea.
-3. Ejecuta desde la raíz del repo:
+Validación de logs:
 
 ```powershell
-python labs/lab02_device_identity/tools/capture_console_evidence.py `
-  --port COMx `
-  --profile hardened `
-  --output labs/lab02_device_identity/evidence/lab02_hardened_console.log
-```
-
-### Wrapper PowerShell
-
-También se puede usar:
-
-```powershell
-labs/lab02_device_identity/tools/capture_console_evidence.ps1 `
-  -Port COMx `
-  -Profile insecure
-
-labs/lab02_device_identity/tools/capture_console_evidence.ps1 `
-  -Port COMx `
-  -Profile hardened
-```
-
-### Capturar gates estáticos
-
-```powershell
-python labs/lab02_device_identity/tools/capture_static_gates.py
-```
-
-Esto genera:
-
-```text
-labs/lab02_device_identity/evidence/lab02_static_gates.txt
+python labs\lab02_device_identity\tools\check_lab02_identity_logs.py labs\lab02_device_identity\evidence\lab02_insecure_console.log --profile insecure
+python labs\lab02_device_identity\tools\check_lab02_identity_logs.py labs\lab02_device_identity\evidence\lab02_hardened_console.log --profile hardened
 ```
 
 ## Evidencias esperadas
 
-Evidencias a capturar:
+Evidencias versionadas:
 
 ```text
 evidence/lab02_insecure_console.log
 evidence/lab02_hardened_console.log
 evidence/lab02_static_gates.txt
-evidence/lab02_build_esp32s3.txt
 ```
 
-Validación esperada:
+Evidencias pendientes para cierre completo audit-grade:
 
-```powershell
-python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_insecure_console.log --profile insecure
-python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_hardened_console.log --profile hardened
+```text
+evidence/lab02_build_esp32s3.txt
 ```
 
 ## Errores comunes
 
-- Confundir identidad pública con secreto de autenticación.
-- Usar el mismo `device_id` hardcodeado en todos los dispositivos.
-- Exponer MAC/eFuse sin necesidad operativa.
-- Permitir que una consola local cambie el identificador estable en HARDENED.
-- Considerar una identidad derivada como sustituto de certificados o claves privadas.
-- Ignorar avisos de checksum mismatch entre imagen compilada y flasheada.
-- Capturar logs con un perfil distinto al indicado por el nombre del fichero.
-- Editar manualmente logs para que pasen el scanner.
+- Capturar `INSECURE` con firmware `HARDENED` cargado.
+- Ignorar un mismatch de perfil detectado por el script de captura.
+- Confundir identidad pública con autenticación.
+- Exponer raw MAC en HARDENED.
+- Versionar logs con tokens reales.
+- Flashear con target incorrecto (`esp32` en vez de `esp32s3`).
 
 ## Ejercicios
 
-1. Demuestra que el perfil `INSECURE` arranca con un `device_id` clonable.
-2. Demuestra que `set_device_id LAB02-CLONED-ID` es aceptado en `INSECURE`.
-3. Demuestra que `get_claim` en `INSECURE` expone un token compartido de laboratorio.
-4. Demuestra que `HARDENED` deriva un `device_id` estable y no editable.
-5. Demuestra que `HARDENED` no expone MAC ni token de autenticación.
-6. Ejecuta el scanner de logs y guarda la evidencia.
-7. Genera logs automáticamente y compáralos contra la captura manual.
+1. Demuestra que `INSECURE` permite cambiar `device_id` desde consola.
+2. Demuestra que `INSECURE` genera un claim clonable con token compartido ficticio.
+3. Demuestra que `HARDENED` rechaza `set_device_id`.
+4. Demuestra que `HARDENED` redacta `raw_hardware_id`.
+5. Explica por qué `auth_token="not_applicable"` no equivale a autenticación.
 
 ## Preguntas de repaso
 
-1. ¿Por qué un `device_id` hardcodeado es clonable?
-2. ¿Por qué identidad no equivale a autenticación?
-3. ¿Cuándo puede ser aceptable derivar una identidad pública desde un identificador hardware?
-4. ¿Por qué no deben aparecer secretos en claims ni logs?
-5. ¿Qué evidencias mínimas cierran el LAB 02?
-6. ¿Por qué la captura automatizada reduce errores de auditoría?
+1. ¿Por qué una identidad hardcoded es clonable?
+2. ¿Por qué una identidad no debe ser mutable por consola en campo?
+3. ¿Qué aporta derivar un identificador de eFuse MAC con hash?
+4. ¿Por qué raw MAC puede considerarse dato sensible de inventario?
+5. ¿Qué diferencia hay entre identidad y autenticación?
 
 ## Fuentes
 
@@ -284,26 +217,23 @@ Ver `docs/references.md` y la bibliografía global del repositorio.
 CUMPLE:
 - README con índice obligatorio.
 - Firmware ESP-IDF para ESP32-S3 añadido.
-- Documentación audit-grade inicial añadida.
+- Documentación audit-grade del laboratorio añadida.
 - Gates estáticos del laboratorio añadidos.
-- Script de captura automática de consola añadido.
-- Script de captura de gates estáticos añadido.
-- Build y flash validados por el operador tras corregir toString(profile).
-- Perfil INSECURE validado funcionalmente por el operador.
-- Perfil HARDENED validado funcionalmente por el operador.
+- Consola USB Serial/JTAG validada en hardware.
+- Perfil INSECURE validado con evidencia automática.
+- Perfil HARDENED validado con evidencia automática.
+- Logs HARDENED redactan raw_hardware_id.
+- set_device_id queda bloqueado en HARDENED.
+- Gates estáticos capturados con PASS.
 
 NO CUMPLE:
 - No es firmware de producción.
-- No implementa PKI, TLS cliente, Secure Element ni attestation remota real.
+- No implementa certificados, TLS mutuo, Secure Boot ni Flash Encryption activa.
 
 NO VALIDADO:
-- Evidencias generadas automáticamente pendientes de commit.
 - Build completo con cero warnings pendiente de evidencia stdout versionada.
 
 PENDIENTE:
-- Ejecutar captura automática INSECURE.
-- Ejecutar captura automática HARDENED.
-- Ejecutar captura automática de gates.
 - Capturar `idf.py build` completo en `evidence/lab02_build_esp32s3.txt`.
 - Revisar CI tras push.
 ```

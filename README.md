@@ -4,8 +4,8 @@ Repositorio público de laboratorios auditables para aprender ciberseguridad apl
 
 El proyecto combina dos objetivos:
 
-1. **Aprendizaje técnico:** comprender seguridad en firmware mediante laboratorios reproducibles sobre microcontroladores reales.
-2. **Conocimiento abierto:** construir una base pública reutilizable que pueda evolucionar hacia documentación extensa o un libro con licencia abierta.
+1. **Aprendizaje técnico**: comprender seguridad en firmware mediante laboratorios reproducibles sobre microcontroladores reales.
+2. **Conocimiento abierto**: construir una base pública reutilizable que pueda evolucionar hacia documentación extensa o un libro con licencia abierta.
 
 > Un laboratorio puede ser inseguro de forma intencionada; nunca puede ser precario por descuido.
 
@@ -15,6 +15,7 @@ El proyecto combina dos objetivos:
 - [Principios del proyecto](#principios-del-proyecto)
 - [Estructura del repositorio](#estructura-del-repositorio)
 - [Roadmap de laboratorios](#roadmap-de-laboratorios)
+- [Evidencias y gates](#evidencias-y-gates)
 - [Estándar de diseño embebido](#estándar-de-diseño-embebido)
 - [Licencias](#licencias)
 - [Estado actual](#estado-actual)
@@ -22,117 +23,103 @@ El proyecto combina dos objetivos:
 
 ## Objetivo
 
-Crear una ruta pública, rigurosa y práctica para aprender desarrollo seguro en sistemas embebidos, con foco inicial en **ESP32-S3 / ESP-IDF**.
+Crear una ruta pública, rigurosa y práctica para estudiar ciberseguridad embebida desde firmware real, evidencias reproducibles y documentación audit-grade.
 
-Cada laboratorio debe permitir:
+El repositorio está diseñado para enseñar con contraste controlado:
 
-```text
-clonar → leer → compilar → flashear → reproducir → auditar → aprender
-```
+- comportamiento inseguro intencionado;
+- mitigación endurecida;
+- trazabilidad requisito → diseño → implementación → test → evidencia;
+- gates de calidad ejecutables por cualquier persona.
 
 ## Principios del proyecto
 
-Todo laboratorio debe cumplir el estándar permanente de diseño embebido audit-grade:
+- Arquitectura por componentes.
+- HAL/BSP explícito cuando aplica.
+- Logs tratados como API de diagnóstico.
+- Evidencias pequeñas, versionables y sin secretos reales.
+- Perfiles inseguros solo para docencia y nunca por descuido.
+- Estados explícitos: `CUMPLE`, `NO CUMPLE`, `NO VALIDADO`, `PENDIENTE`.
 
-- arquitectura por componentes;
-- FULL HAL/BSP;
-- diseño orientado a interfaces y encapsulación;
-- modelo temporal explícito;
-- política de concurrencia, ISR y recursos compartidos;
-- presupuesto de recursos;
-- configuración validada;
-- logs como API sin secretos;
-- seguridad desde diseño;
-- trazabilidad requisito → diseño → implementación → test → evidencia;
-- QA gates estrictos;
-- cero warnings;
-- documentación audit-grade;
-- transparencia `CUMPLE / NO CUMPLE / NO VALIDADO / PENDIENTE`.
+## Estructura del repositorio
 
-El estándar completo está en:
+```text
+.github/       Workflows y automatización.
+book/          Material destinado a capítulos o libro abierto.
+docs/          Documentación transversal.
+labs/          Laboratorios prácticos.
+standard/      Estándar audit-grade del proyecto.
+tools/         Gates y utilidades globales.
+```
+
+## Roadmap de laboratorios
+
+| Laboratorio | Estado | Resumen |
+| --- | --- | --- |
+| LAB 01 — Firmware inseguro vs firmware endurecido | CUMPLE | Validado en ESP32-S3 con evidencias automáticas de consola, secret scan y gates. |
+| LAB 02 — Identidad única de dispositivo | CUMPLE | Validado en ESP32-S3 con evidencias automáticas de identidad INSECURE/HARDENED y gates. |
+| LAB 03 — MQTT seguro con TLS | PENDIENTE | No implementado todavía. |
+| LAB 04 — OTA firmada con rollback | PENDIENTE | No implementado todavía. |
+| LAB 05 — Configuración remota segura | PENDIENTE | No implementado todavía. |
+| LAB 06 — Hardening de interfaces físicas | PENDIENTE | No implementado todavía. |
+| LAB 07 — SBOM y trazabilidad de release | PENDIENTE | No implementado todavía. |
+| LAB 08 — Secure Boot + Flash Encryption | PENDIENTE | No implementado todavía. |
+| LAB 09 — Gateway seguro multi-interfaz | PENDIENTE | No implementado todavía. |
+| LAB 10 — Mini PSIRT de producto | PENDIENTE | No implementado todavía. |
+
+## Evidencias y gates
+
+Cada laboratorio debe incluir, como mínimo:
+
+- README con índice obligatorio;
+- documentación técnica audit-grade;
+- plan de pruebas;
+- evidencias de consola o test cuando aplique;
+- gates estáticos propios;
+- estado explícito de validación.
+
+Los gates globales se ejecutan con:
+
+```powershell
+python tools/repo_quality_gates/run_static_repo_gates.py
+```
+
+## Estándar de diseño embebido
+
+El estándar del proyecto está en:
 
 ```text
 standard/estandar_diseno_embebido_audit_grade.md
 ```
 
-## Estructura del repositorio
-
-```text
-secure-embedded-labs/
-├── standard/
-├── docs/
-├── labs/
-├── book/
-├── tools/
-└── .github/
-```
-
-## Roadmap de laboratorios
-
-| Lab | Tema | Estado |
-|---:|---|---|
-| 01 | Firmware inseguro vs firmware endurecido | Validado localmente en ESP32-S3 |
-| 02 | Identidad única de dispositivo | Pendiente |
-| 03 | MQTT seguro con TLS | Pendiente |
-| 04 | OTA firmada con rollback | Pendiente |
-| 05 | Configuración remota segura | Pendiente |
-| 06 | Hardening de interfaces físicas | Pendiente |
-| 07 | SBOM y trazabilidad de release | Pendiente |
-| 08 | Secure Boot + Flash Encryption | Pendiente |
-| 09 | Gateway seguro multi-interfaz | Pendiente |
-| 10 | Mini PSIRT de producto | Pendiente |
-
-## Estándar de diseño embebido
-
-Este repositorio no acepta laboratorios precarios. Cada entrega debe clasificarse explícitamente:
-
-```text
-CUMPLE:
-- ...
-
-NO CUMPLE:
-- ...
-
-NO VALIDADO:
-- ...
-
-PENDIENTE:
-- ...
-```
+Ese documento define el criterio de arquitectura, testabilidad, trazabilidad, evidencias, logs, configuración, seguridad y transparencia del repositorio.
 
 ## Licencias
 
-- Código fuente, scripts y firmware: **Apache-2.0**. Véase `LICENSE-CODE` y `LICENSE`.
-- Documentación, texto educativo, figuras propias y futuro material de libro: **CC BY-SA 4.0**. Véase `LICENSE-DOCS`.
+El código fuente, scripts, firmware y herramientas se publican bajo Apache License 2.0. Ver `LICENSE`.
 
-Los datasheets, normas, libros, artículos y documentos de terceros no se redistribuirán salvo permiso explícito. Se citarán o enlazarán según corresponda.
+La documentación, material didáctico, guías y capítulos se publican bajo Creative Commons Attribution-ShareAlike 4.0 International. Ver `LICENSE-DOCS`.
 
 ## Estado actual
 
 ```text
 CUMPLE:
-- Repositorio público estructurado.
-- Estándar audit-grade incluido.
-- Readme principal con índice.
-- Gates estáticos de estructura incluidos.
-- LAB 01 implementado con firmware ESP-IDF para ESP32-S3.
-- LAB 01 validado localmente en hardware en perfiles INSECURE y HARDENED.
-- Evidencias funcionales de consola añadidas para LAB 01.
-
-NO CUMPLE:
-- No contiene todavía capítulos completos de libro.
-- Los laboratorios posteriores al LAB 01 aún no están implementados.
+- Estructura pública inicial.
+- Estándar audit-grade incorporado.
+- LAB 01 implementado y validado localmente en ESP32-S3.
+- LAB 02 implementado y validado localmente en ESP32-S3.
+- Evidencias automáticas de consola/gates para LAB 01 y LAB 02.
+- Gates estáticos globales y por laboratorio.
 
 NO VALIDADO:
-- Build completo con cero warnings no queda cerrado hasta versionar stdout completo de `idf.py build`.
-- CI real en GitHub queda pendiente de revisar tras cada push.
+- Build completo con stdout versionado y cero warnings para todos los laboratorios.
+- CI de build real en hardware o contenedor ESP-IDF para todos los laboratorios.
 
 PENDIENTE:
-- Capturar evidencia formal de build ESP-IDF completo.
-- Capturar evidencia formal del scanner de secretos.
-- Implementar LAB 02.
+- Implementar LAB 03.
+- Capturar evidencias completas de build cuando proceda.
 ```
 
 ## Cómo contribuir
 
-Lee `CONTRIBUTING.md` antes de abrir un Pull Request.
+Ver `CONTRIBUTING.md` y `SECURITY.md`.

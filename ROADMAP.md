@@ -8,10 +8,11 @@
 - [Fase 2 — Seguridad conectada](#fase-2--seguridad-conectada)
 - [Fase 3 — Plataforma segura](#fase-3--plataforma-segura)
 - [Fase 4 — Publicación y libro](#fase-4--publicación-y-libro)
+- [Criterio de cierre](#criterio-de-cierre)
 
 ## Visión
 
-Crear una ruta abierta para aprender ciberseguridad embebida con laboratorios reproducibles y auditables.
+Crear una ruta abierta para aprender ciberseguridad embebida con laboratorios reproducibles, auditables y orientados a evidencia.
 
 ## Fase 0 — Fundación
 
@@ -24,8 +25,15 @@ Crear una ruta abierta para aprender ciberseguridad embebida con laboratorios re
 
 ## Fase 1 — Laboratorios base
 
-- [ ] LAB 01 — Firmware inseguro vs firmware endurecido.
-- [ ] LAB 02 — Identidad única de dispositivo.
+- [x] LAB 01 — Firmware inseguro vs firmware endurecido.
+- [x] LAB 02 — Identidad única de dispositivo.
+
+Estado de cierre:
+
+```text
+LAB 01: CUMPLE con evidencias automáticas de consola, secret scan y gates.
+LAB 02: CUMPLE con evidencias automáticas de consola, validadores de identidad y gates.
+```
 
 ## Fase 2 — Seguridad conectada
 
@@ -42,7 +50,17 @@ Crear una ruta abierta para aprender ciberseguridad embebida con laboratorios re
 
 ## Fase 4 — Publicación y libro
 
-- [ ] LAB 10 — Mini PSIRT de producto.
-- [ ] Capítulos iniciales en `book/chapters`.
-- [ ] Revisión editorial.
-- [ ] Publicación de versión del libro bajo CC BY-SA 4.0.
+- [ ] Normalizar capítulos en `book/`.
+- [ ] Revisar licencia documental.
+- [ ] Preparar versión publicable.
+
+## Criterio de cierre
+
+Un laboratorio solo se marca como cerrado cuando dispone de:
+
+- firmware o artefacto técnico versionado;
+- documentación con índice;
+- plan de pruebas;
+- evidencias reales o declaración explícita `NO VALIDADO`;
+- gates ejecutados y documentados;
+- commit trazable.

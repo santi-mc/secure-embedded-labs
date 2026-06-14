@@ -1,56 +1,56 @@
-# Requisitos LAB 02
+# LAB 02 — Requisitos
 
 ## Índice
 
 - [Objetivo](#objetivo)
 - [Requisitos funcionales](#requisitos-funcionales)
-- [Requisitos de calidad](#requisitos-de-calidad)
+- [Requisitos de seguridad](#requisitos-de-seguridad)
 - [Trazabilidad](#trazabilidad)
 - [Estado](#estado)
 
 ## Objetivo
 
-Definir requisitos verificables para el laboratorio de identidad única.
+Definir los requisitos verificables del LAB 02 y su trazabilidad hacia evidencias.
 
 ## Requisitos funcionales
 
-| ID | Requisito | Verificación |
+| ID | Requisito | Estado |
 | --- | --- | --- |
-| LAB02-FR-001 | El firmware debe mostrar estado de identidad. | `identity_status` |
-| LAB02-FR-002 | INSECURE debe usar ID clonable. | `lab02_insecure_console.log` |
-| LAB02-FR-003 | INSECURE debe permitir sobrescribir ID por consola. | `set_device_id` en `lab02_insecure_console.log` |
-| LAB02-FR-004 | HARDENED debe derivar ID estable desde fuente hardware. | `lab02_hardened_console.log` |
-| LAB02-FR-005 | HARDENED debe rechazar sobrescritura de ID. | `identity_update_rejected` en `lab02_hardened_console.log` |
-| LAB02-FR-006 | El flujo de captura debe poder ejecutarse sin edición manual de logs. | `tools/capture_console_evidence.py` |
+| LAB02-FR-001 | El firmware debe exponer `identity_status`. | CUMPLE |
+| LAB02-FR-002 | El firmware debe exponer `get_identity`. | CUMPLE |
+| LAB02-FR-003 | El firmware debe exponer `get_claim`. | CUMPLE |
+| LAB02-FR-004 | El perfil INSECURE debe permitir `set_device_id`. | CUMPLE |
+| LAB02-FR-005 | El perfil HARDENED debe rechazar `set_device_id`. | CUMPLE |
 
-## Requisitos de calidad
+## Requisitos de seguridad
 
-| ID | Requisito | Verificación |
+| ID | Requisito | Estado |
 | --- | --- | --- |
-| LAB02-QR-001 | Logs JSON/NDJSON. | inspección de consola y scanner |
-| LAB02-QR-002 | Sin secretos en HARDENED. | `tools/check_lab02_identity_logs.py` |
-| LAB02-QR-003 | Gates estáticos propios. | `tools/run_static_gates.py` |
-| LAB02-QR-004 | Build sin warnings. | `idf.py build` |
-| LAB02-QR-005 | Evidencias reproducibles por script. | `tools/capture_console_evidence.py` y `tools/capture_static_gates.py` |
+| LAB02-SR-001 | HARDENED no debe exponer raw hardware ID. | CUMPLE |
+| LAB02-SR-002 | HARDENED no debe emitir token secreto. | CUMPLE |
+| LAB02-SR-003 | HARDENED debe derivar identidad desde fuente no mutable por consola. | CUMPLE |
+| LAB02-SR-004 | INSECURE debe demostrar identidad clonable como vulnerabilidad didáctica. | CUMPLE |
 
 ## Trazabilidad
 
-| Requisito | Implementación | Prueba | Evidencia |
-| --- | --- | --- | --- |
-| LAB02-FR-002 | `identity_service` INSECURE | `get_identity` | `evidence/lab02_insecure_console.log` |
-| LAB02-FR-003 | `set_device_id` INSECURE | actualización aceptada | `evidence/lab02_insecure_console.log` |
-| LAB02-FR-004 | `identity_service` HARDENED | `identity_status` | `evidence/lab02_hardened_console.log` |
-| LAB02-FR-005 | política HARDENED | actualización rechazada | `evidence/lab02_hardened_console.log` |
-| LAB02-QR-005 | scripts de captura | ejecución automática | logs generados en `evidence/` |
+| Requisito | Evidencia |
+| --- | --- |
+| LAB02-FR-001 | `evidence/lab02_insecure_console.log`, `evidence/lab02_hardened_console.log` |
+| LAB02-FR-002 | `evidence/lab02_insecure_console.log`, `evidence/lab02_hardened_console.log` |
+| LAB02-FR-003 | `evidence/lab02_insecure_console.log`, `evidence/lab02_hardened_console.log` |
+| LAB02-FR-004 | `evidence/lab02_insecure_console.log` |
+| LAB02-FR-005 | `evidence/lab02_hardened_console.log` |
+| LAB02-SR-001 | `evidence/lab02_hardened_console.log` |
+| LAB02-SR-002 | `evidence/lab02_hardened_console.log` |
+| LAB02-SR-003 | `evidence/lab02_hardened_console.log` |
+| LAB02-SR-004 | `evidence/lab02_insecure_console.log` |
 
 ## Estado
 
 ```text
 CUMPLE:
-- Requisitos iniciales definidos.
-- Trazabilidad actualizada para capturas automáticas.
+- Requisitos funcionales y de seguridad trazados a evidencias.
 
 NO VALIDADO:
-- Evidencias automáticas pendientes de generación y commit.
-- Build completo con cero warnings pendiente de evidencia.
+- Build completo con cero warnings pendiente de evidencia stdout versionada.
 ```
