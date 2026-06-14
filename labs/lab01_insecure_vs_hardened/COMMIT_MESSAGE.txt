@@ -1,31 +1,24 @@
-fix(lab01): acumular caracteres de consola hasta fin de línea
+test(lab01): automatizar captura de evidencias de consola
 
-Corrige la HAL de consola stdio del LAB 01 para que los caracteres
-recibidos por USB Serial/JTAG se acumulen hasta recibir CR/LF antes de
-entregarlos al parser de comandos.
-
-Motivo:
-En hardware real, la entrada stdio puede entregar caracteres parciales.
-La implementación anterior podía interpretar cada carácter de `help` como
-un comando independiente (`h`, `e`, `l`, `p`), haciendo que la consola
-interactiva no fuese usable aunque el spam de EOF estuviese corregido.
+Añade automatización de evidencias para el LAB 01, alineada con el flujo usado en el LAB 02.
 
 Cambios principales:
-- sustituye la lectura por fgets por lectura incremental con getchar
-- añade buffer interno persistente de línea
-- acumula caracteres hasta CR/LF
-- soporta CRLF sin generar comando vacío adicional
-- conserva el estado NoData y el backoff cuando no hay datos
-- mantiene detección de línea demasiado larga
+- añade capture_console_evidence.py para capturar logs INSECURE/HARDENED por puerto serie
+- añade wrapper PowerShell capture_console_evidence.ps1
+- añade capture_static_gates.py para guardar salida raw de gates estáticos
+- añade capture_secret_scan.py para guardar salida raw del scanner de secretos
+- añade validación de perfil observado en logs capturados
+- actualiza README, evidence/README, audit_evidence, test_plan y requirements
+- actualiza gates estáticos para exigir los scripts nuevos
 
 Validación requerida:
+- python labs/lab01_insecure_vs_hardened/tools/apply_lab01_auto_evidence_docs_update.py
 - python tools/repo_quality_gates/run_static_repo_gates.py
 - python labs/lab01_insecure_vs_hardened/tools/run_static_gates.py
-- idf.py build
-- idf.py flash monitor
-- prueba manual: escribir `help` debe generar un único comando `help`
+- capturar logs INSECURE/HARDENED en ESP32-S3
+- python labs/lab01_insecure_vs_hardened/tools/capture_secret_scan.py
+- python labs/lab01_insecure_vs_hardened/tools/capture_static_gates.py
 
 Estado:
-- CUMPLE como corrección funcional de consola si el build queda limpio y
-  la prueba manual confirma comandos completos.
-- NO CUMPLE como firmware de producción.
+- CUMPLE como automatización de evidencias si los scripts generan capture_validation result=PASS.
+- NO VALIDADO como cierre audit-grade completo hasta adjuntar stdout completo de idf.py build.

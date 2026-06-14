@@ -41,7 +41,13 @@ REQUIRED_FILES = [
     "../docs/audit_evidence.md",
     "../docs/known_limitations.md",
     "../docs/hardening_policy.md",
-]
+
+    "../tools/capture_console_evidence.py",
+    "../tools/capture_console_evidence.ps1",
+    "../tools/capture_static_gates.py",
+    "../tools/capture_secret_scan.py",
+    "../tools/apply_lab01_auto_evidence_docs_update.py",
+    "../evidence/README.md",]
 
 
 def fail(message: str) -> None:

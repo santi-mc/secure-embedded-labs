@@ -18,6 +18,7 @@
 - [Cómo compilar](#cómo-compilar)
 - [Cómo flashear](#cómo-flashear)
 - [Cómo probar](#cómo-probar)
+- [Captura automática de evidencias](#captura-automática-de-evidencias)
 - [Evidencias esperadas](#evidencias-esperadas)
 - [Errores comunes](#errores-comunes)
 - [Ejercicios](#ejercicios)
@@ -41,6 +42,7 @@ Demostrar, de forma controlada y reproducible, cómo un firmware embebido puede 
 ## Prerrequisitos
 
 - ESP-IDF instalado.
+- Python 3 con `pyserial` para captura automática.
 - Conocimientos básicos de C++ embebido.
 - Lectura del estándar `standard/estandar_diseno_embebido_audit_grade.md`.
 - Hardware ESP32-S3 con USB Serial/JTAG operativo.
@@ -70,6 +72,7 @@ Este laboratorio cubre seguridad local de consola, logs, secretos ficticios y va
 
 - ESP-IDF compatible con ESP32-S3.
 - Python 3.
+- `pyserial` para `tools/capture_console_evidence.py`.
 - Git.
 
 ## Arquitectura prevista
@@ -145,7 +148,7 @@ help
 get_config
 set_period 0
 set_period 10abc
-set_mqtt_password MiPasswordSuperSecreta123
+set_mqtt_password LAB01_TEST_PASSWORD
 get_config
 factory_reset
 security_status
@@ -153,28 +156,66 @@ security_status
 
 Secuencia completa en `test/manual_lab01_commands.txt`.
 
+## Captura automática de evidencias
+
+Instala `pyserial` si no está disponible:
+
+```powershell
+python -m pip install pyserial
+```
+
+Con el firmware `INSECURE` ya compilado y flasheado:
+
+```powershell
+python labs\lab01_insecure_vs_hardened\tools\capture_console_evidence.py `
+  --port COMx `
+  --profile insecure `
+  --output labs\lab01_insecure_vs_hardened\evidence\lab01_insecure_console.log
+```
+
+Con el firmware `HARDENED` ya compilado y flasheado:
+
+```powershell
+python labs\lab01_insecure_vs_hardened\tools\capture_console_evidence.py `
+  --port COMx `
+  --profile hardened `
+  --output labs\lab01_insecure_vs_hardened\evidence\lab01_hardened_console.log
+```
+
+Captura de gates estáticos:
+
+```powershell
+python labs\lab01_insecure_vs_hardened\tools\capture_static_gates.py
+```
+
+Captura del scanner de secretos:
+
+```powershell
+python labs\lab01_insecure_vs_hardened\tools\capture_secret_scan.py
+```
+
 ## Evidencias esperadas
 
-Evidencias versionadas:
+Evidencias automatizadas versionables:
 
 ```text
 evidence/lab01_insecure_console.log
 evidence/lab01_hardened_console.log
-evidence/lab01_static_gates_reported.txt
-```
-
-Evidencias aún pendientes para cierre completo audit-grade:
-
-```text
-evidence/lab01_build_esp32s3.txt
+evidence/lab01_static_gates.txt
 evidence/lab01_secret_scan.txt
 ```
 
-Validación de logs:
+Evidencia aún pendiente para cierre audit-grade completo:
+
+```text
+evidence/lab01_build_esp32s3.txt
+```
+
+Validación manual equivalente de logs:
 
 ```powershell
-python tools/check_no_secrets_in_logs.py evidence/lab01_insecure_console.log --profile insecure
-python tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --profile hardened
+python labs\lab01_insecure_vs_hardened\tools\check_no_secrets_in_logs.py labs\lab01_insecure_vs_hardened\evidence\lab01_insecure_console.log --profile insecure
+python labs\lab01_insecure_vs_hardened\tools\check_no_secrets_in_logs.py labs\lab01_insecure_vs_hardened\evidence\lab01_hardened_console.log --profile hardened
 ```
 
 ## Errores comunes
@@ -182,7 +223,8 @@ python tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --p
 - Usar el puerto UART externo en vez del USB Serial/JTAG nativo.
 - Probar solo un perfil y considerar cerrado el laboratorio.
 - Usar una contraseña real en `set_mqtt_password`.
-- No guardar logs como evidencia.
+- Guardar metadatos de captura con comandos sensibles en claro.
+- No validar que el perfil observado coincide con el perfil solicitado.
 - Confundir `INSECURE` didáctico con firmware válido para producción.
 - Ignorar avisos de checksum mismatch entre imagen compilada y flasheada.
 - Usar un HUB USB inestable durante la validación.
@@ -194,7 +236,7 @@ python tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --p
 3. Demuestra que `set_period 25s` queda rechazado en `HARDENED`.
 4. Demuestra que `set_period 0` queda rechazado en `HARDENED`.
 5. Demuestra que `set_mqtt_password` no aparece en bruto en logs `HARDENED`.
-6. Añade un nuevo comando no sensible y comprueba que el scanner no da falsos positivos.
+6. Regenera las evidencias con `capture_console_evidence.py` y valida que ambas tienen `capture_validation result=PASS`.
 
 ## Preguntas de repaso
 
@@ -202,7 +244,7 @@ python tools/check_no_secrets_in_logs.py evidence/lab01_hardened_console.log --p
 2. ¿Por qué loguear comandos brutos es peligroso?
 3. ¿Qué diferencia hay entre validar sintaxis y validar rango?
 4. ¿Por qué `factory_reset` debe tener política de autorización?
-5. ¿Qué evidencias mínimas cierran el LAB 01?
+5. ¿Por qué una evidencia debe validar el perfil real observado y no solo el nombre del fichero?
 
 ## Fuentes
 
@@ -221,7 +263,7 @@ CUMPLE:
 - Perfil HARDENED validado en hardware como mitigación.
 - Logs HARDENED redactan secretos.
 - factory_reset queda bloqueado en HARDENED.
-- Gates estáticos reportados como PASS por el operador.
+- Captura automática de evidencias añadida.
 
 NO CUMPLE:
 - No es firmware de producción.
@@ -229,10 +271,9 @@ NO CUMPLE:
 
 NO VALIDADO:
 - Build completo con cero warnings pendiente de evidencia stdout versionada.
-- Scanner de secretos pendiente de evidencia stdout versionada.
 
 PENDIENTE:
+- Regenerar evidencias con scripts automáticos.
 - Capturar `idf.py build` completo en `evidence/lab01_build_esp32s3.txt`.
-- Capturar scanner de secretos en `evidence/lab01_secret_scan.txt`.
 - Revisar CI tras push.
 ```
