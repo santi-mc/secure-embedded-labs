@@ -8,9 +8,14 @@
 ## Unreleased
 
 ```text
+CUMPLE:
+- Añadidos scripts de captura automática de evidencias de consola.
+- Añadido script de captura de gates estáticos.
+- Documentación actualizada para capturas reproducibles INSECURE/HARDENED.
+
 PENDIENTE:
-- Validación en hardware.
-- Evidencias reales.
+- Generar y versionar evidencias automáticas.
+- Capturar build completo con stdout.
 ```
 
 ## 0.1.0

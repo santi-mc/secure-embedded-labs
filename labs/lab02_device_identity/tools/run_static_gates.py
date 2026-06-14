@@ -37,6 +37,8 @@ REQUIRED_FILES = [
     "firmware/sdkconfig.defaults",
     "test/manual_lab02_commands.txt",
     "tools/check_lab02_identity_logs.py",
+    "tools/capture_console_evidence.py",
+    "tools/capture_static_gates.py",
 ]
 
 REQUIRED_COMPONENTS = [

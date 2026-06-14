@@ -18,6 +18,7 @@
 - [Cómo compilar](#cómo-compilar)
 - [Cómo flashear](#cómo-flashear)
 - [Cómo probar](#cómo-probar)
+- [Captura automática de evidencias](#captura-automática-de-evidencias)
 - [Evidencias esperadas](#evidencias-esperadas)
 - [Errores comunes](#errores-comunes)
 - [Ejercicios](#ejercicios)
@@ -37,6 +38,7 @@ Demostrar por qué la identidad de dispositivo no debe ser un identificador hard
 - Comparar identidad clonable `INSECURE` frente a identidad derivada `HARDENED`.
 - Diseñar logs de identidad sin secretos y con trazabilidad.
 - Validar evidencias de consola y gates estáticos.
+- Automatizar la captura de evidencias sin editar logs manualmente.
 
 ## Prerrequisitos
 
@@ -71,6 +73,11 @@ Este laboratorio cubre identidad local de dispositivo en ESP32-S3 usando consola
 - ESP-IDF compatible con ESP32-S3.
 - Python 3.
 - Git.
+- `pyserial` para captura automática de consola:
+
+```powershell
+python -m pip install pyserial
+```
 
 ## Arquitectura prevista
 
@@ -163,6 +170,62 @@ security_status
 
 Secuencia completa en `test/manual_lab02_commands.txt`.
 
+## Captura automática de evidencias
+
+La captura automática se hace con `tools/capture_console_evidence.py`. El script no cambia el perfil, no compila y no flashea: primero hay que cargar el firmware con el perfil correspondiente.
+
+### Capturar INSECURE
+
+1. Selecciona `INSECURE` en `idf.py menuconfig`.
+2. Compila y flashea.
+3. Ejecuta desde la raíz del repo:
+
+```powershell
+python labs/lab02_device_identity/tools/capture_console_evidence.py `
+  --port COMx `
+  --profile insecure `
+  --output labs/lab02_device_identity/evidence/lab02_insecure_console.log
+```
+
+### Capturar HARDENED
+
+1. Selecciona `HARDENED` en `idf.py menuconfig`.
+2. Compila y flashea.
+3. Ejecuta desde la raíz del repo:
+
+```powershell
+python labs/lab02_device_identity/tools/capture_console_evidence.py `
+  --port COMx `
+  --profile hardened `
+  --output labs/lab02_device_identity/evidence/lab02_hardened_console.log
+```
+
+### Wrapper PowerShell
+
+También se puede usar:
+
+```powershell
+labs/lab02_device_identity/tools/capture_console_evidence.ps1 `
+  -Port COMx `
+  -Profile insecure
+
+labs/lab02_device_identity/tools/capture_console_evidence.ps1 `
+  -Port COMx `
+  -Profile hardened
+```
+
+### Capturar gates estáticos
+
+```powershell
+python labs/lab02_device_identity/tools/capture_static_gates.py
+```
+
+Esto genera:
+
+```text
+labs/lab02_device_identity/evidence/lab02_static_gates.txt
+```
+
 ## Evidencias esperadas
 
 Evidencias a capturar:
@@ -177,8 +240,8 @@ evidence/lab02_build_esp32s3.txt
 Validación esperada:
 
 ```powershell
-python tools/check_lab02_identity_logs.py evidence/lab02_insecure_console.log --profile insecure
-python tools/check_lab02_identity_logs.py evidence/lab02_hardened_console.log --profile hardened
+python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_insecure_console.log --profile insecure
+python labs/lab02_device_identity/tools/check_lab02_identity_logs.py labs/lab02_device_identity/evidence/lab02_hardened_console.log --profile hardened
 ```
 
 ## Errores comunes
@@ -189,6 +252,8 @@ python tools/check_lab02_identity_logs.py evidence/lab02_hardened_console.log --
 - Permitir que una consola local cambie el identificador estable en HARDENED.
 - Considerar una identidad derivada como sustituto de certificados o claves privadas.
 - Ignorar avisos de checksum mismatch entre imagen compilada y flasheada.
+- Capturar logs con un perfil distinto al indicado por el nombre del fichero.
+- Editar manualmente logs para que pasen el scanner.
 
 ## Ejercicios
 
@@ -198,6 +263,7 @@ python tools/check_lab02_identity_logs.py evidence/lab02_hardened_console.log --
 4. Demuestra que `HARDENED` deriva un `device_id` estable y no editable.
 5. Demuestra que `HARDENED` no expone MAC ni token de autenticación.
 6. Ejecuta el scanner de logs y guarda la evidencia.
+7. Genera logs automáticamente y compáralos contra la captura manual.
 
 ## Preguntas de repaso
 
@@ -206,6 +272,7 @@ python tools/check_lab02_identity_logs.py evidence/lab02_hardened_console.log --
 3. ¿Cuándo puede ser aceptable derivar una identidad pública desde un identificador hardware?
 4. ¿Por qué no deben aparecer secretos en claims ni logs?
 5. ¿Qué evidencias mínimas cierran el LAB 02?
+6. ¿Por qué la captura automatizada reduce errores de auditoría?
 
 ## Fuentes
 
@@ -219,19 +286,24 @@ CUMPLE:
 - Firmware ESP-IDF para ESP32-S3 añadido.
 - Documentación audit-grade inicial añadida.
 - Gates estáticos del laboratorio añadidos.
+- Script de captura automática de consola añadido.
+- Script de captura de gates estáticos añadido.
+- Build y flash validados por el operador tras corregir toString(profile).
+- Perfil INSECURE validado funcionalmente por el operador.
+- Perfil HARDENED validado funcionalmente por el operador.
 
 NO CUMPLE:
 - No es firmware de producción.
 - No implementa PKI, TLS cliente, Secure Element ni attestation remota real.
 
 NO VALIDADO:
-- Build ESP-IDF real pendiente.
-- Flash ESP32-S3 pendiente.
-- Evidencias INSECURE/HARDENED pendientes.
+- Evidencias generadas automáticamente pendientes de commit.
+- Build completo con cero warnings pendiente de evidencia stdout versionada.
 
 PENDIENTE:
-- Ejecutar build real.
-- Validar en hardware.
-- Capturar evidencias.
+- Ejecutar captura automática INSECURE.
+- Ejecutar captura automática HARDENED.
+- Ejecutar captura automática de gates.
+- Capturar `idf.py build` completo en `evidence/lab02_build_esp32s3.txt`.
 - Revisar CI tras push.
 ```

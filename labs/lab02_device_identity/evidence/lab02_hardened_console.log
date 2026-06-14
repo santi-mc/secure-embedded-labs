@@ -1,0 +1,28 @@
+# capture_start lab=LAB02 profile=HARDENED port=COM5 baudrate=115200
+# operator_note firmware_profile_must_match_capture_profile
+# tx help
+{"event":"command_received","schema_version":1,"uptime_ms":1708,"profile":"HARDENED","cmd":"help"}
+{"event":"help","schema_version":1,"uptime_ms":1708,"profile":"HARDENED","commands":"help,identity_status,get_identity,get_claim,set_device_id <id>,security_status"}
+# tx identity_status
+{"event":"command_received","schema_version":1,"uptime_ms":3058,"profile":"HARDENED","cmd":"identity_status"}
+{"event":"identity_status","schema_version":1,"uptime_ms":3059,"project":"secure_embedded_labs_lab02","fw_version":"0.1.0","lab":"LAB02","profile":"HARDENED","device_id":"lab02-096ffd608ed493281ad972e8","identity_source":"efuse_mac_sha256_truncated","mutable_by_console":"false","claim_contains_secret":"false"}
+# tx get_identity
+{"event":"command_received","schema_version":1,"uptime_ms":4408,"profile":"HARDENED","cmd":"get_identity"}
+{"event":"identity_dump","schema_version":1,"uptime_ms":4409,"profile":"HARDENED","device_id":"lab02-096ffd608ed493281ad972e8","identity_source":"efuse_mac_sha256_truncated","raw_hardware_id":"<redacted>","mutable_by_console":"false"}
+# tx get_claim
+{"event":"command_received","schema_version":1,"uptime_ms":5758,"profile":"HARDENED","cmd":"get_claim"}
+{"event":"identity_claim","schema_version":1,"uptime_ms":5759,"profile":"HARDENED","device_id":"lab02-096ffd608ed493281ad972e8","claim_type":"public_identity_claim","auth_token":"not_applicable","warning":"identity_is_not_authentication"}
+# tx set_device_id CLONED-DEVICE-001
+{"event":"command_received","schema_version":1,"uptime_ms":7109,"profile":"HARDENED","cmd":"set_device_id","args":"<redacted>"}
+{"event":"identity_update_rejected","schema_version":1,"uptime_ms":7109,"profile":"HARDENED","field":"device_id","reason":"rejected_by_policy"}
+# tx get_identity
+{"event":"command_received","schema_version":1,"uptime_ms":8458,"profile":"HARDENED","cmd":"get_identity"}
+{"event":"identity_dump","schema_version":1,"uptime_ms":8459,"profile":"HARDENED","device_id":"lab02-096ffd608ed493281ad972e8","identity_source":"efuse_mac_sha256_truncated","raw_hardware_id":"<redacted>","mutable_by_console":"false"}
+# tx get_claim
+{"event":"command_received","schema_version":1,"uptime_ms":9708,"profile":"HARDENED","cmd":"get_claim"}
+{"event":"identity_claim","schema_version":1,"uptime_ms":9709,"profile":"HARDENED","device_id":"lab02-096ffd608ed493281ad972e8","claim_type":"public_identity_claim","auth_token":"not_applicable","warning":"identity_is_not_authentication"}
+# tx security_status
+{"event":"command_received","schema_version":1,"uptime_ms":11058,"profile":"HARDENED","cmd":"security_status"}
+{"event":"security_status","schema_version":1,"uptime_ms":11059,"project":"secure_embedded_labs_lab02","fw_version":"0.1.0","lab":"LAB02","profile":"HARDENED","target":"esp32s3","console_transport":"usb_serial_jtag_stdio","secure_boot":"false","flash_encryption":"false"}
+# capture_validation result=PASS
+# capture_end

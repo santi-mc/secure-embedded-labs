@@ -1,0 +1,25 @@
+# capture_start lab=LAB02 profile=INSECURE port=COM5 baudrate=115200
+# operator_note firmware_profile_must_match_capture_profile
+# tx help
+{"event":"command_received","schema_version":1,"uptime_ms":1708,"profile":"INSECURE","raw":"help"}
+{"event":"help","schema_version":1,"uptime_ms":1708,"profile":"INSECURE","commands":"help,identity_status,get_identity,get_claim,set_device_id <id>,security_status"}
+# tx identity_status
+{"event":"command_received","schema_version":1,"uptime_ms":3058,"profile":"INSECURE","raw":"identity_status"}
+{"event":"identity_status","schema_version":1,"uptime_ms":3059,"project":"secure_embedded_labs_lab02","fw_version":"0.1.0","lab":"LAB02","profile":"INSECURE","device_id":"LAB02-DEVICE-0001","identity_source":"hardcoded_mutable_console_value","mutable_by_console":"true","claim_contains_secret":"true"}
+# tx get_identity
+{"event":"command_received","schema_version":1,"uptime_ms":4408,"profile":"INSECURE","raw":"get_identity"}
+{"event":"identity_dump","schema_version":1,"uptime_ms":4409,"profile":"INSECURE","device_id":"LAB02-DEVICE-0001","identity_source":"hardcoded_mutable_console_value","raw_hardware_id":"94A9902F66FC","mutable_by_console":"true"}
+# tx set_device_id CLONED-DEVICE-001
+{"event":"command_received","schema_version":1,"uptime_ms":5759,"profile":"INSECURE","raw":"set_device_id CLONED-DEVICE-001"}
+{"event":"identity_update_accepted","schema_version":1,"uptime_ms":5759,"profile":"INSECURE","field":"device_id","value":"CLONED-DEVICE-001"}
+# tx get_identity
+{"event":"command_received","schema_version":1,"uptime_ms":7108,"profile":"INSECURE","raw":"get_identity"}
+{"event":"identity_dump","schema_version":1,"uptime_ms":7109,"profile":"INSECURE","device_id":"CLONED-DEVICE-001","identity_source":"hardcoded_mutable_console_value","raw_hardware_id":"94A9902F66FC","mutable_by_console":"true"}
+# tx get_claim
+{"event":"command_received","schema_version":1,"uptime_ms":8458,"profile":"INSECURE","raw":"get_claim"}
+{"event":"identity_claim","schema_version":1,"uptime_ms":8458,"profile":"INSECURE","device_id":"CLONED-DEVICE-001","claim_type":"insecure_cloneable_claim","auth_token":"INSECURE_SHARED_LAB02_TOKEN","warning":"intentional_lab_vulnerability"}
+# tx security_status
+{"event":"command_received","schema_version":1,"uptime_ms":9808,"profile":"INSECURE","raw":"security_status"}
+{"event":"security_status","schema_version":1,"uptime_ms":9809,"project":"secure_embedded_labs_lab02","fw_version":"0.1.0","lab":"LAB02","profile":"INSECURE","target":"esp32s3","console_transport":"usb_serial_jtag_stdio","secure_boot":"false","flash_encryption":"false"}
+# capture_validation result=PASS
+# capture_end

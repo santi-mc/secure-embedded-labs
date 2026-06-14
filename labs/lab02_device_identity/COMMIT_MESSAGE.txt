@@ -11,12 +11,18 @@ Incluye:
 - Consola USB Serial/JTAG con lectura por línea.
 - Documentación audit-grade.
 - Gates estáticos y scanner de logs.
+- Script de captura automática de evidencias de consola.
+- Script de captura de gates estáticos.
 
 Validación:
 - python tools/repo_quality_gates/run_static_repo_gates.py
 - python labs/lab02_device_identity/tools/run_static_gates.py
 
+Validación reportada por operador:
+- Build y flash en ESP32-S3 tras corregir resolución de toString(profile).
+- Perfil INSECURE validado con identidad mutable y claim inseguro.
+- Perfil HARDENED validado con identidad derivada, raw_hardware_id redactado y set_device_id rechazado.
+
 NO VALIDADO:
-- Build real ESP-IDF pendiente.
-- Flash en ESP32-S3 pendiente.
-- Evidencias INSECURE/HARDENED pendientes.
+- Evidencias automáticas pendientes de generación y commit.
+- Build completo con cero warnings pendiente de stdout versionado.

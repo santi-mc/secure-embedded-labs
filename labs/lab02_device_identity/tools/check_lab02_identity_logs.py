@@ -28,10 +28,21 @@ def has_event(events: list[dict[str, object]], name: str) -> bool:
     return any(event.get("event") == name for event in events)
 
 
-def check_insecure(events: list[dict[str, object]]) -> list[str]:
+def _check_profile_exact(events: list[dict[str, object]], expected: str) -> list[str]:
     errors: list[str] = []
-    if not any(event.get("profile") == "INSECURE" for event in events):
-        errors.append("missing INSECURE profile events")
+    observed = [event.get("profile") for event in events if "profile" in event]
+    if not observed:
+        return [f"missing {expected} profile events"]
+    unexpected = sorted({str(value) for value in observed if value != expected})
+    if unexpected:
+        errors.append(
+            f"profile mismatch: expected only {expected}, observed {','.join(unexpected)}"
+        )
+    return errors
+
+
+def check_insecure(events: list[dict[str, object]]) -> list[str]:
+    errors: list[str] = _check_profile_exact(events, "INSECURE")
     if not any(event.get("device_id") == "LAB02-DEVICE-0001" for event in events):
         errors.append("missing default cloneable device_id")
     if not any(event.get("auth_token") == INSECURE_TOKEN for event in events):
@@ -42,9 +53,7 @@ def check_insecure(events: list[dict[str, object]]) -> list[str]:
 
 
 def check_hardened(events: list[dict[str, object]]) -> list[str]:
-    errors: list[str] = []
-    if not any(event.get("profile") == "HARDENED" for event in events):
-        errors.append("missing HARDENED profile events")
+    errors: list[str] = _check_profile_exact(events, "HARDENED")
     if any(event.get("auth_token") == INSECURE_TOKEN for event in events):
         errors.append("HARDENED log exposes insecure shared token")
     if any(event.get("raw_hardware_id") not in (None, "<redacted>") for event in events):
