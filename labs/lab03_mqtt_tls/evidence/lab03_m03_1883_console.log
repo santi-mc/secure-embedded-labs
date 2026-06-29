@@ -1,0 +1,23 @@
+# capture_start lab=LAB03 scenario=M03-1883 port=COM5 baudrate=115200
+# tx help
+{"event":"command_received","schema_version":1,"uptime_ms":1948,"raw":"help"}
+{"event":"help","schema_version":1,"uptime_ms":1949,"commands":"help,scenario_list,select_scenario <id>,scenario_status,mqtt_connect_dry_run,mqtt_publish_dry_run,security_status"}
+# tx scenario_list
+{"event":"command_received","schema_version":1,"uptime_ms":3068,"raw":"scenario_list"}
+{"event":"scenario_list","schema_version":1,"uptime_ms":3069,"count":"11","ids":"M03-1883,M03-1884,M03-8883,M03-8884,M03-8885,M03-8886,M03-8887,M03-8080,M03-8081,M03-8090,M03-8091"}
+# tx select_scenario M03-1883
+{"event":"command_received","schema_version":1,"uptime_ms":4069,"raw":"select_scenario M03-1883"}
+{"event":"scenario_selected","schema_version":1,"uptime_ms":4070,"scenario_id":"M03-1883"}
+# tx scenario_status
+{"event":"command_received","schema_version":1,"uptime_ms":5169,"raw":"scenario_status"}
+{"event":"scenario_status","schema_version":1,"uptime_ms":5169,"scenario_id":"M03-1883","host":"test.mosquitto.org","port":"1883","transport":"mqtt_tcp","tls_enabled":"false","auth_username_password":"false","client_certificate_required":"false","certificate_expired":"false","security_result":"NO_CUMPLE_EXPECTED","notes":"plain_unauthenticated_baseline"}
+# tx mqtt_connect_dry_run
+{"event":"command_received","schema_version":1,"uptime_ms":6269,"raw":"mqtt_connect_dry_run"}
+{"event":"mqtt_connect_dry_run","schema_version":1,"uptime_ms":6269,"scenario_id":"M03-1883","host":"test.mosquitto.org","port":"1883","tls_enabled":"false","network_action":"not_executed","broker":"test.mosquitto.org","security_result":"NO_CUMPLE_EXPECTED"}
+# tx mqtt_publish_dry_run
+{"event":"command_received","schema_version":1,"uptime_ms":7369,"raw":"mqtt_publish_dry_run"}
+{"event":"mqtt_publish_dry_run","schema_version":1,"uptime_ms":7369,"scenario_id":"M03-1883","topic":"secure-embedded-labs/lab03/dry-run","payload":"LAB03_DRY_RUN_PAYLOAD","network_action":"not_executed","security_result":"NO_CUMPLE_EXPECTED"}
+# tx security_status
+{"event":"command_received","schema_version":1,"uptime_ms":8469,"raw":"security_status"}
+{"event":"security_status","schema_version":1,"uptime_ms":8469,"project":"secure_embedded_labs_lab03","fw_version":"0.1.0","lab":"LAB03","target":"esp32s3","console_transport":"usb_serial_jtag_stdio","mqtt_real_network":"false","tls_real_validation":"false","phase":"LAB03A_MATRIX_DRY_RUN"}
+# capture_validation result=PASS

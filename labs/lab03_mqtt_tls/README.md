@@ -1,123 +1,142 @@
-# LAB 03 — MQTT seguro con TLS
+# LAB 03 — Matriz MQTT contra test.mosquitto.org
+
+**Version:** 0.1.0
 
 ## Índice
 
 - [Objetivo](#objetivo)
-- [Objetivos de aprendizaje](#objetivos-de-aprendizaje)
-- [Prerrequisitos](#prerrequisitos)
 - [Alcance](#alcance)
-- [Fuera de alcance](#fuera-de-alcance)
-- [Hardware requerido](#hardware-requerido)
-- [Software requerido](#software-requerido)
-- [Arquitectura prevista](#arquitectura-prevista)
-- [Modelo temporal](#modelo-temporal)
-- [Threat model](#threat-model)
-- [Requisitos](#requisitos)
+- [Roadmap interno](#roadmap-interno)
+- [Broker de pruebas](#broker-de-pruebas)
+- [Matriz contractual](#matriz-contractual)
+- [Arquitectura](#arquitectura)
+- [Firmware](#firmware)
+- [Comandos de consola](#comandos-de-consola)
 - [Cómo compilar](#cómo-compilar)
-- [Cómo flashear](#cómo-flashear)
 - [Cómo probar](#cómo-probar)
 - [Evidencias esperadas](#evidencias-esperadas)
-- [Errores comunes](#errores-comunes)
-- [Ejercicios](#ejercicios)
-- [Preguntas de repaso](#preguntas-de-repaso)
-- [Fuentes](#fuentes)
 - [Estado](#estado)
 
 ## Objetivo
 
-Enviar telemetría mediante MQTT/TLS con validación estricta de certificados.
+Construir una matriz reproducible de escenarios MQTT usando el broker público `test.mosquitto.org`.
 
-## Objetivos de aprendizaje
-
-- Comprender el problema de seguridad abordado por el laboratorio.
-- Reproducir el comportamiento esperado de forma controlada.
-- Aplicar mitigaciones y validar evidencias.
-- Relacionar la práctica con el estándar audit-grade del repositorio.
-
-## Prerrequisitos
-
-- Conocimientos básicos de C/C++ embebido.
-- Conocimientos básicos de ESP-IDF o toolchain equivalente.
-- Lectura del estándar en `standard/estandar_diseno_embebido_audit_grade.md`.
+El primer objetivo ejecutable es demostrar el baseline inseguro `1883` sin TLS. El laboratorio queda preparado desde el primer commit para cubrir los once escenarios publicados por el broker: MQTT plano, MQTT con autenticación, MQTT sobre TLS, mTLS, certificado expirado y MQTT over WebSockets.
 
 ## Alcance
 
-Este laboratorio cubrirá únicamente el alcance definido en su documentación específica.
+Esta fase crea el contrato de matriz y un firmware didáctico inicial que ejecuta comprobaciones dry-run de política MQTT. No establece todavía conexión real con el broker.
 
-## Fuera de alcance
+## Roadmap interno
 
-No se considerará producto final ni firmware de producción salvo que el laboratorio lo indique explícitamente.
+```text
+LAB 03A — MQTT TCP 1883 sin TLS, baseline inseguro.
+LAB 03B — MQTT TCP 1884 con autenticación sin TLS.
+LAB 03C — MQTT TCP 8883/8886 con TLS y validación de servidor.
+LAB 03D — MQTT TCP 8885 con TLS y autenticación usuario/password.
+LAB 03E — MQTT TCP 8884 con certificado cliente.
+LAB 03F — MQTT TCP 8887 con certificado servidor expirado, rechazo esperado.
+LAB 03G — MQTT over WebSockets 8080/8081/8090/8091.
+```
 
-## Hardware requerido
+## Broker de pruebas
 
-Pendiente de definición específica del laboratorio.
+Broker contractual: `test.mosquitto.org`.
 
-## Software requerido
+No se deben enviar secretos reales. Los usuarios, passwords, topics y payloads del laboratorio son ficticios y deben tratarse como material didáctico.
 
-Pendiente de definición específica del laboratorio.
+## Matriz contractual
 
-## Arquitectura prevista
+Ver `docs/scenario_matrix.md`.
 
-Debe seguir arquitectura por componentes, HAL/BSP, testabilidad y documentación audit-grade.
+## Arquitectura
 
-## Modelo temporal
+```text
+main
+├── command_console
+├── mqtt_scenario
+├── secure_log
+├── board_hal
+└── lab03_domain
+```
 
-Pendiente de definición específica del laboratorio.
+La implementación inicial es intencionadamente dry-run para separar política de seguridad, trazabilidad de escenarios y contrato de evidencias antes de introducir Wi-Fi, ESP-MQTT, certificados y broker real.
 
-## Threat model
+## Firmware
 
-Debe documentarse en `docs/threat_model.md` dentro del laboratorio.
+El firmware arranca sobre ESP32-S3 y consola USB Serial/JTAG. La selección de escenarios se hace en runtime desde consola.
 
-## Requisitos
+## Comandos de consola
 
-Debe documentarse en `docs/requirements.md` y `docs/security_requirements.md` dentro del laboratorio.
+```text
+help
+scenario_list
+select_scenario <id>
+scenario_status
+mqtt_connect_dry_run
+mqtt_publish_dry_run
+security_status
+```
+
+Escenario por defecto: `M03-1883`.
 
 ## Cómo compilar
 
-Pendiente de implementación.
-
-## Cómo flashear
-
-Pendiente de implementación.
+```powershell
+cd labs\lab03_mqtt_tls\firmware
+idf.py set-target esp32s3
+idf.py build
+```
 
 ## Cómo probar
 
-Pendiente de implementación.
+```powershell
+python labs\lab03_mqtt_tls\tools\capture_console_evidence.py `
+  --port COM5 `
+  --scenario M03-1883 `
+  --output labs\lab03_mqtt_tls\evidence\lab03_m03_1883_console.log
+
+python labs\lab03_mqtt_tls\tools\check_mqtt_scenario_logs.py `
+  labs\lab03_mqtt_tls\evidence\lab03_m03_1883_console.log `
+  --scenario M03-1883
+```
 
 ## Evidencias esperadas
 
-Las evidencias deben guardarse en `evidence/` y resumirse en `docs/audit_evidence.md`.
+```text
+evidence/lab03_m03_1883_console.log
+evidence/lab03_static_gates.txt
+```
 
-## Errores comunes
+Evidencias pendientes para cierre completo futuro:
 
-Pendiente de completar durante el desarrollo del laboratorio.
-
-## Ejercicios
-
-Pendiente de completar durante el desarrollo del laboratorio.
-
-## Preguntas de repaso
-
-Pendiente de completar durante el desarrollo del laboratorio.
-
-## Fuentes
-
-Cada laboratorio debe clasificar sus fuentes según la jerarquía definida en el estándar.
+```text
+evidence/lab03_build_esp32s3.txt
+evidence/lab03_real_broker_matrix.txt
+evidence/lab03_tls_certificate_validation.txt
+```
 
 ## Estado
 
 ```text
 CUMPLE:
-- README del laboratorio creado con índice obligatorio.
+- Matriz contractual completa de test.mosquitto.org documentada.
+- Firmware inicial dry-run para ESP32-S3 añadido.
+- Baseline 1883 sin TLS modelado como NO CUMPLE de seguridad esperado.
+- Gates y herramientas de evidencia añadidos.
 
 NO CUMPLE:
-- Laboratorio no implementado todavía.
+- 1883/1884/8080/8090 no son diseños seguros porque no usan TLS.
+- Esta fase no implementa conexión real al broker.
 
 NO VALIDADO:
-- Build y pruebas reales no ejecutadas.
+- Build real ESP-IDF pendiente.
+- Flash en ESP32-S3 pendiente.
+- Evidencia real pendiente.
 
 PENDIENTE:
-- Implementación técnica.
-- Evidencias.
-- Documentación específica.
+- Integrar ESP-MQTT como dependencia gestionada.
+- Añadir Wi-Fi/provisioning de red.
+- Ejecutar matriz real contra test.mosquitto.org.
+- Introducir TLS, CA, mTLS y WebSockets en fases posteriores.
 ```
