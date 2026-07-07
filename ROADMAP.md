@@ -37,7 +37,13 @@ LAB 02: CUMPLE con evidencias automáticas de consola, validadores de identidad 
 
 ## Fase 2 — Seguridad conectada
 
-- [ ] LAB 03 — Matriz MQTT test.mosquitto.org: 03A baseline 1883 sin TLS en curso.
+- [x] LAB 03A — M03-1883 / MQTT TCP sin TLS y sin autenticación, baseline inseguro validado como dry-run.
+- [ ] LAB 03B — M03-1884 / MQTT TCP sin TLS con usuario/password.
+- [ ] LAB 03C — M03-8883 y M03-8886 / MQTT TLS sin autenticación.
+- [ ] LAB 03D — M03-8885 / MQTT TLS con usuario/password.
+- [ ] LAB 03E — M03-8884 / MQTT con certificado cliente.
+- [ ] LAB 03F — M03-8887 / rechazo de certificado expirado.
+- [ ] LAB 03G — MQTT over WebSockets 8080/8081/8090/8091.
 - [ ] LAB 04 — OTA firmada con rollback.
 - [ ] LAB 05 — Configuración remota segura.
 
