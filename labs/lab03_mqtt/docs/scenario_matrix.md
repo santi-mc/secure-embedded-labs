@@ -1,33 +1,38 @@
-# Matriz MQTT — LAB 03
+# Matriz de escenarios — LAB 03 MQTT
 
 ## Índice
 
+- [Propósito](#proposito)
 - [Matriz](#matriz)
-- [Criterio](#criterio)
+- [Criterio de cierre](#criterio-de-cierre)
 - [Estado](#estado)
+
+## Propósito
+
+Definir la matriz contractual MQTT contra `test.mosquitto.org`.
 
 ## Matriz
 
-| Sublab | Escenario | Puerto | TLS | Auth | Estado |
-| --- | --- | ---: | --- | --- | --- |
-| LAB 03A | M03-1883 | 1883 | No | No | CUMPLE dry-run |
-| LAB 03B | M03-1884 | 1884 | No | Usuario/password | PENDIENTE |
-| LAB 03C | M03-8883 / M03-8886 | 8883 / 8886 | Sí | No | PENDIENTE |
-| LAB 03D | M03-8885 | 8885 | Sí | Usuario/password | PENDIENTE |
-| LAB 03E | M03-8884 | 8884 | Sí | Certificado cliente | PENDIENTE |
-| LAB 03F | M03-8887 | 8887 | Sí, expirado | No | PENDIENTE |
-| LAB 03G | M03-8080/8081/8090/8091 | 8080/8081/8090/8091 | Mixto | Mixto | PENDIENTE |
+| Sublab | Escenario | Puerto | Transporte | TLS | Autenticación | Estado |
+| --- | --- | ---: | --- | --- | --- | --- |
+| LAB 03A | M03-1883 | 1883 | MQTT TCP | No | No | CUMPLE dry-run |
+| LAB 03B | M03-1884 | 1884 | MQTT TCP | No | Usuario/password | PENDIENTE |
+| LAB 03C | M03-8883 / M03-8886 | 8883 / 8886 | MQTT TCP | Sí | No | PENDIENTE |
+| LAB 03D | M03-8885 | 8885 | MQTT TCP | Sí | Usuario/password | PENDIENTE |
+| LAB 03E | M03-8884 | 8884 | MQTT TCP | Sí | Certificado cliente | PENDIENTE |
+| LAB 03F | M03-8887 | 8887 | MQTT TCP | Sí, expirado | No | PENDIENTE |
+| LAB 03G | M03-8080/8081/8090/8091 | Mixto | WebSockets | Mixto | Mixto | PENDIENTE |
 
-## Criterio
+## Criterio de cierre
 
-Los escenarios sin TLS pueden ser funcionales, pero no cumplen seguridad para credenciales ni datos sensibles.
+Cada sublaboratorio debe tener documentación, evidencia propia, gates y estado explícito.
 
 ## Estado
 
 ```text
 CUMPLE:
-- Matriz documentada.
+- Matriz definida.
 
 PENDIENTE:
-- Completar LAB 03B y siguientes con evidencias propias.
+- Implementar y validar LAB 03B–LAB 03G.
 ```

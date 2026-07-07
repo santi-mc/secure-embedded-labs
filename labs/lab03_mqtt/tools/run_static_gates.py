@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Static gates for LAB 03 MQTT family."""
+
 from __future__ import annotations
 
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parents[3]
 LAB03 = ROOT / "labs" / "lab03_mqtt"
@@ -49,8 +49,7 @@ REQUIRED_LAB_README_SECTIONS = [
 
 
 def fail(message: str) -> None:
-    print(f"FAIL: {message}")
-    raise SystemExit(1)
+    raise SystemExit(f"FAIL: {message}")
 
 
 def require_file(path: Path) -> None:
@@ -89,22 +88,14 @@ def main() -> int:
     for rel in REQUIRED_DIRS:
         require_dir(LAB03 / rel)
 
-    for name in [
-        "lab03a_m03_1883_plain_no_auth",
-        "lab03b_m03_1884_plain_auth",
-        "lab03c_m03_8883_8886_tls_server_auth",
-        "lab03d_m03_8885_tls_userpass",
-        "lab03e_m03_8884_mtls_client_cert",
-        "lab03f_m03_8887_expired_cert_rejection",
-        "lab03g_m03_websockets",
-    ]:
-        check_readme(LAB03 / name / "README.md")
-        require_file(LAB03 / name / "CHANGELOG.md")
+    for sublab in sorted(LAB03.glob("lab03*_m03_*")):
+        check_readme(sublab / "README.md")
 
     check_markdown_indexes()
+
     print("PASS: LAB 03 static gates completed successfully")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

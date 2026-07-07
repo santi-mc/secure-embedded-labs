@@ -1,4 +1,4 @@
-# Changelog — LAB 03A
+# Changelog — LAB 03A — M03-1883 / MQTT TCP plano sin autenticación
 
 ## Índice
 
@@ -6,12 +6,15 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-CUMPLE dry-run
+CUMPLE:
+- Dry-run de M03-1883 validado.
+- Evidencia de consola disponible.
+- Clasificación de seguridad: funcional, pero NO CUMPLE como diseño seguro.
+
+NO VALIDADO:
+- Conexión real MQTT.
+
+PENDIENTE:
+- Mantener evidencia tras cualquier cambio estructural.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-1883` dentro de LAB 03 MQTT.

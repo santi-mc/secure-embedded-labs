@@ -1,4 +1,4 @@
-# Changelog — LAB 03E
+# Changelog — LAB 03E — M03-8884 / MQTT mTLS con certificado cliente
 
 ## Índice
 
@@ -6,12 +6,7 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-8884` dentro de LAB 03 MQTT.

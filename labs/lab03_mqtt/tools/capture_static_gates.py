@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+"""Capture LAB 03 static gate evidence."""
+
 from __future__ import annotations
 
 import subprocess
@@ -13,7 +16,7 @@ COMMANDS = [
 ]
 
 
-def run_command(name: str, script: Path) -> tuple[int, str, str]:
+def run_command(script: Path) -> tuple[int, str, str]:
     completed = subprocess.run(
         [sys.executable, str(script)],
         cwd=ROOT,
@@ -51,7 +54,7 @@ def main() -> int:
             ])
             continue
 
-        returncode, stdout, stderr = run_command(name, script)
+        returncode, stdout, stderr = run_command(script)
         if returncode != 0:
             overall_ok = False
 

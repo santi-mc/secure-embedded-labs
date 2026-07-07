@@ -2,24 +2,26 @@
 
 ## Índice
 
-- [Resumen](#resumen)
-- [Evidencias](#evidencias)
+- [Propósito](#proposito)
+- [Evidencias agregadas](#evidencias-agregadas)
 - [Estado](#estado)
 
-## Resumen
+## Propósito
 
-Esta carpeta contiene evidencias agregadas de la familia LAB 03 MQTT.
+Agrupar evidencias transversales de la familia LAB 03 MQTT.
 
-## Evidencias
+## Evidencias agregadas
 
-| Evidencia | Estado |
-| --- | --- |
-| `lab03_static_gates.txt` | CUMPLE cuando se regenere con gates actuales |
-| LAB 03A consola | Ver `../lab03a_m03_1883_plain_no_auth/evidence/` |
+| Evidencia | Estado | Descripción |
+| --- | --- | --- |
+| `lab03_static_gates.txt` | CUMPLE si termina en PASS | Captura de gate global y gate LAB 03. |
 
 ## Estado
 
 ```text
+CUMPLE:
+- Evidencia agregada de gates prevista.
+
 PENDIENTE:
-- Regenerar `lab03_static_gates.txt` después del saneamiento.
+- Regenerar `lab03_static_gates.txt` tras cualquier cambio documental o de gates.
 ```

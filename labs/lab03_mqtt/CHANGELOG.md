@@ -9,9 +9,17 @@
 ### Changed
 
 - LAB 03 queda organizado como familia MQTT en `labs/lab03_mqtt/`.
-- LAB 03A queda aislado como sublaboratorio independiente para `M03-1883`.
-- LAB 03B a LAB 03G quedan preparados como sublaboratorios pendientes.
+- LAB 03A queda aislado como sublaboratorio `lab03a_m03_1883_plain_no_auth`.
+- Los escenarios LAB 03B–LAB 03G quedan definidos como sublaboratorios pendientes.
+- Los gates agregados se mantienen en `labs/lab03_mqtt/tools/`.
 
-### Fixed
+### Status
 
-- Saneados README y gates tras la migración desde `lab03_mqtt_tls`.
+```text
+CUMPLE:
+- LAB 03A mantiene evidencia dry-run.
+- La estructura deja de estar limitada al concepto TLS.
+
+PENDIENTE:
+- Implementar LAB 03B.
+```

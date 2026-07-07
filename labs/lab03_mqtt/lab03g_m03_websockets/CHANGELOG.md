@@ -1,4 +1,4 @@
-# Changelog — LAB 03G
+# Changelog — LAB 03G — MQTT over WebSockets
 
 ## Índice
 
@@ -6,12 +6,7 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-8080/8081/8090/8091` dentro de LAB 03 MQTT.

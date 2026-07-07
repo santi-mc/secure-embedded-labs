@@ -1,4 +1,4 @@
-# Changelog — LAB 03C
+# Changelog — LAB 03C — M03-8883/M03-8886 / MQTT TLS con validación de servidor
 
 ## Índice
 
@@ -6,12 +6,7 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-8883 / M03-8886` dentro de LAB 03 MQTT.

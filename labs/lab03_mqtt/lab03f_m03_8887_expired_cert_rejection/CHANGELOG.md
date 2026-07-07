@@ -1,4 +1,4 @@
-# Changelog — LAB 03F
+# Changelog — LAB 03F — M03-8887 / Rechazo de certificado expirado
 
 ## Índice
 
@@ -6,12 +6,7 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-8887` dentro de LAB 03 MQTT.

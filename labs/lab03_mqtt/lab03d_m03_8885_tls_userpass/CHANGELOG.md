@@ -1,4 +1,4 @@
-# Changelog — LAB 03D
+# Changelog — LAB 03D — M03-8885 / MQTT TLS con usuario/password
 
 ## Índice
 
@@ -6,12 +6,7 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-8885` dentro de LAB 03 MQTT.

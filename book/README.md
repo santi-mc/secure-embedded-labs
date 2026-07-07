@@ -1,4 +1,4 @@
-# Libro — Secure Embedded Labs
+# Libro abierto — Secure Embedded Labs
 
 ## Índice
 
@@ -8,23 +8,20 @@
 
 ## Propósito
 
-El libro acompaña al repositorio técnico y explica la narrativa de seguridad de cada laboratorio.
-No sustituye a las evidencias ni a los gates.
+Evolucionar los laboratorios hacia un libro abierto de ciberseguridad embebida con evidencias reproducibles.
 
 ## Capítulos
 
-| Capítulo | Tema | Estado |
-| --- | --- | --- |
-| 01 | Firmware inseguro vs endurecido | CUMPLE |
-| 02 | Identidad única de dispositivo | CUMPLE |
-| 03 | Matriz MQTT | EN CURSO |
+- `chapters/01_firmware_inseguro_vs_endurecido.md`
+- `chapters/02_identidad_dispositivo.md`
+- `chapters/03_matriz_mqtt.md`
 
 ## Estado
 
 ```text
 CUMPLE:
-- El libro refleja LAB 01, LAB 02 y la reorganización de LAB 03 como matriz MQTT.
+- Libro iniciado con capítulos 01, 02 y 03.
 
 PENDIENTE:
-- Ampliar capítulos conforme se cierren nuevos sublaboratorios.
+- Revisión editorial completa.
 ```

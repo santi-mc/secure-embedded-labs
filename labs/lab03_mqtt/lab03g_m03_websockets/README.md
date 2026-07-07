@@ -1,8 +1,4 @@
-# LAB 03G — M03-8080/8081/8090/8091 / MQTT over WebSockets y WebSockets Secure
-
-**Estado:** PENDIENTE
-**Escenario:** M03-8080/8081/8090/8091
-**Puerto:** 8080/8081/8090/8091
+# LAB 03G — MQTT over WebSockets
 
 ## Índice
 
@@ -29,123 +25,127 @@
 
 ## Objetivo
 
-Validar el escenario `M03-8080/8081/8090/8091` dentro de la familia LAB 03 MQTT.
+Cubrir MQTT sobre WebSockets y WebSockets Secure, con y sin autenticación.
 
 ## Objetivos de aprendizaje
 
-- Separar comportamiento funcional de cumplimiento de seguridad.
-- Identificar el efecto de TLS, autenticación y validación de certificados.
-- Mantener evidencia propia del sublaboratorio.
+- Separar comportamiento funcional de clasificación de seguridad.
+- Mantener logs parseables y sin secretos reales.
+- Generar evidencias reproducibles del escenario.
+- Conservar trazabilidad con la matriz contractual de LAB 03.
 
 ## Prerrequisitos
 
-- Revisar `../README.md`.
-- Mantener limpio el árbol de artefactos generados.
-- No usar secretos reales contra brokers públicos.
+- Repositorio limpio de artefactos generados.
+- Python 3 disponible.
+- ESP-IDF disponible cuando el sublaboratorio incluya firmware.
+- Lectura previa de `README.md`, `ROADMAP.md` y `labs/README.md`.
 
 ## Alcance
 
-Este sublaboratorio cubre `M03-8080/8081/8090/8091`: MQTT over WebSockets y WebSockets Secure.
+Este sublaboratorio cubre `M03-8080/8081/8090/8091` sobre `test.mosquitto.org`, puerto `8080 / 8081 / 8090 / 8091`, TLS `mixed` y autenticación `mixed`.
 
 ## Fuera de alcance
 
-- Reutilizar evidencias de otro sublaboratorio.
-- Declarar conexión real si solo existe dry-run.
-- Introducir credenciales reales en firmware, logs o documentación.
+- Uso de secretos reales.
+- Producción.
+- Mezclar el resultado con otros escenarios MQTT.
+- Declarar conexión real sin evidencia específica.
 
 ## Hardware requerido
 
-- ESP32-S3 compatible.
-- Cable USB de datos.
-- Consola USB Serial/JTAG para fases dry-run.
+- ESP32-S3 compatible con ESP-IDF para los sublaboratorios con firmware.
+- Cable USB de datos para alimentación, flasheo y consola.
+- Para fases dry-run no se requiere conectividad Wi-Fi real.
+- Para conexión real se documentará red, broker, timeout y limitaciones.
 
 ## Software requerido
 
 - Git.
 - Python 3.
-- ESP-IDF compatible con ESP32-S3 cuando exista firmware.
+- ESP-IDF compatible con ESP32-S3.
 - PowerShell o terminal equivalente.
+- Herramientas del repositorio bajo `tools/` y `labs/lab03_mqtt/tools/`.
 
 ## Arquitectura prevista
 
-```text
-lab03g_m03_websockets/
-├── README.md
-├── CHANGELOG.md
-├── docs/
-├── evidence/
-├── firmware/
-├── test/
-└── tools/
-```
+El sublaboratorio mantiene documentación, firmware, herramientas, pruebas y evidencias propias. La familia `lab03_mqtt/` aporta matriz común y gates agregados.
 
 ## Modelo temporal
 
-La fase dry-run usa interacción por consola. Las conexiones reales deberán declarar timeouts, retry y política de fallo.
+Las fases dry-run usan interacción por consola y no ejecutan tareas de red reales. Cuando exista conexión real, los timeouts, retries, callbacks y deadlines deberán documentarse aquí.
 
 ## Threat model
 
-Propiedades del escenario:
-
-```text
-TLS: Mixto
-Auth: Mixto
-Broker: test.mosquitto.org
-```
+- Exposición de credenciales o payloads.
+- Ausencia o mala configuración de TLS.
+- Confusión entre autenticación y confidencialidad.
+- Uso de broker público de pruebas.
+- Logs con información sensible.
 
 ## Requisitos
 
-- Logs sin secretos.
-- Evidencia propia del escenario.
-- Separación explícita entre dry-run y conexión real.
-- Gates en PASS antes de declarar cierre.
+- No registrar secretos reales.
+- Distinguir `CUMPLE`, `NO CUMPLE`, `NO VALIDADO` y `PENDIENTE`.
+- Mantener evidencia propia del sublaboratorio.
+- Pasar gate global y gate LAB 03 antes de cierre.
 
 ## Cómo compilar
 
-Este sublaboratorio todavía no tiene firmware propio validado.
+```powershell
+# PENDIENTE.
+```
 
 ## Cómo flashear
 
-No aplica hasta que exista firmware propio validado.
+```powershell
+# PENDIENTE.
+```
 
 ## Cómo probar
 
 ```powershell
-python tools/repo_quality_gates/run_static_repo_gates.py
-python labs/lab03_mqtt/tools/run_static_gates.py
+python tools\repo_quality_gates\run_static_repo_gates.py
+python labs\lab03_mqtt\tools\run_static_gates.py
 ```
 
 ## Evidencias esperadas
 
-- Evidencia de consola propia cuando se implemente.
-- Evidencia de gates tras integrar el sublaboratorio.
+- Evidencia WS/WSS cuando exista.
+- Evidencia de gates agregados.
 
 ## Errores comunes
 
 - Confundir autenticación con confidencialidad.
-- Publicar secretos reales.
-- Dar por validada una conexión no probada.
+- Declarar seguro un escenario sin TLS.
+- Declarar conexión real validada cuando solo existe dry-run.
+- Versionar `build/`, `sdkconfig`, `sdkconfig.old`, `managed_components` o `__pycache__`.
+- Reutilizar evidencias de otro laboratorio.
 
 ## Ejercicios
 
-- Clasificar el escenario como seguro, inseguro o no validado.
-- Identificar qué propiedades de seguridad faltan.
-- Revisar si la evidencia disponible justifica el estado declarado.
+- Clasificar el escenario como funcional, inseguro, mitigado o no validado.
+- Identificar qué activo protege cada mitigación.
+- Revisar si los logs contienen secretos.
+- Relacionar cada evidencia con el requisito que valida.
 
 ## Preguntas de repaso
 
-- ¿Qué protege TLS en este escenario?
-- ¿Qué protege la autenticación?
-- ¿Qué evidencia permite declarar `CUMPLE`?
+- ¿Qué diferencia hay entre conectividad funcional y cumplimiento de seguridad?
+- ¿Qué evidencia demuestra que el escenario fue probado?
+- ¿Qué condición impide declarar `CUMPLE`?
+- ¿Qué queda fuera de alcance en dry-run?
 
 ## Fuentes
 
-- Documentación pública de `test.mosquitto.org`.
-- Documentación oficial de ESP-IDF.
-- Estándar audit-grade interno del proyecto.
+- Documentación del repositorio.
+- Estándar audit-grade del proyecto.
+- Documentación oficial de ESP-IDF cuando aplique.
+- Documentación pública de `test.mosquitto.org` para LAB 03.
 
 ## Estado
 
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
 ```

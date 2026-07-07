@@ -1,9 +1,5 @@
 # LAB 03 — Familia MQTT contra test.mosquitto.org
 
-**Versión:** 0.2.0
-**Estado:** EN CURSO
-**Modelo:** familia de sublaboratorios independientes
-
 ## Índice
 
 - [Objetivo](#objetivo)
@@ -29,38 +25,39 @@
 
 ## Objetivo
 
-Organizar una matriz MQTT reproducible contra `test.mosquitto.org`, separando cada escenario en un sublaboratorio auditable.
+Organizar una matriz reproducible de escenarios MQTT contra `test.mosquitto.org`, separando MQTT plano, autenticación, TLS, mTLS, certificado expirado y WebSockets en sublaboratorios auditables.
 
 ## Objetivos de aprendizaje
 
-- Diferenciar conectividad funcional de diseño seguro.
-- Separar autenticación, confidencialidad, validación de certificados y mTLS.
-- Evidenciar que MQTT plano no protege credenciales ni payloads sensibles.
+- Distinguir conectividad funcional de diseño seguro.
+- Separar autenticación, confidencialidad y validación de certificados.
+- Evitar que un escenario TLS o mTLS oculte los riesgos de MQTT plano.
 - Mantener trazabilidad escenario → diseño → firmware → test → evidencia.
 
 ## Prerrequisitos
 
 - Repositorio limpio de artefactos generados.
-- Python 3 para herramientas y gates.
-- ESP-IDF cuando se compile firmware.
-- No usar secretos reales contra brokers públicos.
+- Python 3 disponible.
+- ESP-IDF disponible cuando el sublaboratorio incluya firmware.
+- Lectura previa de `README.md`, `ROADMAP.md` y `labs/README.md`.
 
 ## Alcance
 
-Esta familia cubre los escenarios MQTT publicados por `test.mosquitto.org` mediante sublaboratorios independientes.
+La carpeta `lab03_mqtt/` define la familia MQTT, la matriz contractual, los gates agregados y la navegación de sublaboratorios LAB 03A–LAB 03G.
 
 ## Fuera de alcance
 
-- Declarar conexión real si solo existe dry-run.
-- Versionar secretos, claves privadas reales o credenciales operativas.
-- Tratar LAB 03 como un único firmware monolítico.
+- Tratar `lab03_mqtt/` como firmware final único.
+- Mezclar todos los escenarios en un único laboratorio monolítico.
+- Usar secretos reales en un broker público.
+- Declarar conexión real cuando solo existe dry-run.
 
 ## Hardware requerido
 
-- ESP32-S3 compatible.
-- Cable USB de datos.
-- Consola USB Serial/JTAG para fases dry-run.
-- Conectividad Wi-Fi solo cuando el sublaboratorio declare conexión real.
+- ESP32-S3 compatible con ESP-IDF para los sublaboratorios con firmware.
+- Cable USB de datos para alimentación, flasheo y consola.
+- Para fases dry-run no se requiere conectividad Wi-Fi real.
+- Para conexión real se documentará red, broker, timeout y limitaciones.
 
 ## Software requerido
 
@@ -68,108 +65,101 @@ Esta familia cubre los escenarios MQTT publicados por `test.mosquitto.org` media
 - Python 3.
 - ESP-IDF compatible con ESP32-S3.
 - PowerShell o terminal equivalente.
+- Herramientas del repositorio bajo `tools/` y `labs/lab03_mqtt/tools/`.
+
+
+## Matriz contractual
+
+| Sublab | Escenario | Puerto | TLS | Auth | Estado |
+| --- | --- | ---: | --- | --- | --- |
+| LAB 03A | M03-1883 | 1883 | No | No | CUMPLE dry-run |
+| LAB 03B | M03-1884 | 1884 | No | Usuario/password | PENDIENTE |
+| LAB 03C | M03-8883 / M03-8886 | 8883 / 8886 | Sí | No | PENDIENTE |
+| LAB 03D | M03-8885 | 8885 | Sí | Usuario/password | PENDIENTE |
+| LAB 03E | M03-8884 | 8884 | Sí | Certificado cliente | PENDIENTE |
+| LAB 03F | M03-8887 | 8887 | Sí, expirado | No | PENDIENTE |
+| LAB 03G | M03-8080/8081/8090/8091 | Mixto | Mixto | Mixto | PENDIENTE |
 
 ## Arquitectura prevista
 
-```text
-lab03_mqtt/
-├── common/
-├── docs/
-├── evidence/
-├── tools/
-├── lab03a_m03_1883_plain_no_auth/
-├── lab03b_m03_1884_plain_auth/
-├── lab03c_m03_8883_8886_tls_server_auth/
-├── lab03d_m03_8885_tls_userpass/
-├── lab03e_m03_8884_mtls_client_cert/
-├── lab03f_m03_8887_expired_cert_rejection/
-└── lab03g_m03_websockets/
-```
-
-La carpeta superior contiene contrato común, documentación de matriz, gates agregados y evidencias transversales. Cada sublaboratorio mantiene su propio cierre documental y técnico.
+LAB 03 se estructura en una carpeta de familia con documentación común, gates agregados y sublaboratorios independientes. `common/` queda reservado para reutilización explícita. `lab03a`...`lab03g` mantienen cierre documental y técnico propio.
 
 ## Modelo temporal
 
-Las fases dry-run usan interacción por consola. No hay tareas de red reales ni dependencia temporal externa.
-Cuando se introduzca conexión real, el sublaboratorio deberá documentar tareas, timeouts, retry, backoff y deadlines.
+LAB 03A está validado como dry-run por consola. Las fases de conexión real deberán documentar tareas, timeouts, retries, callbacks y deadlines antes de declararse validadas.
 
 ## Threat model
 
-Amenazas mínimas:
-
-- exposición de credenciales;
-- ausencia de confidencialidad;
-- validación incorrecta de certificados;
-- uso de broker público;
-- publicación accidental de secretos;
-- confusión entre autenticación y cifrado.
+- Exposición de credenciales en transporte plano.
+- Publicación accidental de secretos en broker público.
+- Aceptación de certificados inválidos o expirados.
+- Confusión entre autenticación y cifrado.
+- Logs que filtren usuario, password, token, certificados privados o payloads sensibles.
 
 ## Requisitos
 
-- Logs sin secretos.
-- Evidencias reproducibles.
-- Gates globales y específicos en PASS.
-- Separación explícita entre dry-run y conexión real.
-- Estados `CUMPLE`, `NO CUMPLE`, `NO VALIDADO` y `PENDIENTE`.
+- Cada sublaboratorio debe tener README, CHANGELOG, evidencias y estado explícito.
+- Los logs deben ser parseables y no contener secretos reales.
+- Los gates globales y LAB 03 deben pasar antes de declarar cierre.
+- La documentación transversal debe actualizarse con cada cambio de estado.
 
 ## Cómo compilar
 
-Para LAB 03A:
-
 ```powershell
-cd labs/lab03_mqtt/lab03a_m03_1883_plain_no_auth/firmware
+cd labs\lab03_mqtt\lab03a_m03_1883_plain_no_auth\firmware
 idf.py set-target esp32s3
 idf.py build
 ```
 
 ## Cómo flashear
 
-Para LAB 03A:
-
 ```powershell
+cd labs\lab03_mqtt\lab03a_m03_1883_plain_no_auth\firmware
 idf.py -p COMx flash monitor
 ```
-
-Sustituir `COMx` por el puerto real.
 
 ## Cómo probar
 
 ```powershell
-python tools/repo_quality_gates/run_static_repo_gates.py
-python labs/lab03_mqtt/tools/run_static_gates.py
-python labs/lab03_mqtt/tools/capture_static_gates.py
+python tools\repo_quality_gates\run_static_repo_gates.py
+python labs\lab03_mqtt\tools\run_static_gates.py
+python labs\lab03_mqtt\tools\capture_static_gates.py
 ```
 
 ## Evidencias esperadas
 
-- Evidencia agregada de gates: `evidence/lab03_static_gates.txt`.
-- Evidencia LAB 03A: `lab03a_m03_1883_plain_no_auth/evidence/lab03_m03_1883_console.log`.
-- Evidencias propias para LAB 03B y siguientes cuando se implementen.
+- `labs/lab03_mqtt/evidence/lab03_static_gates.txt`.
+- Evidencia específica en cada sublaboratorio.
+- `lab03a_m03_1883_plain_no_auth/evidence/lab03_m03_1883_console.log` para LAB 03A.
 
 ## Errores comunes
 
 - Confundir autenticación con confidencialidad.
 - Declarar seguro un escenario sin TLS.
-- Mantener rutas legacy tras una migración.
-- Reutilizar evidencias de otro sublaboratorio.
+- Declarar conexión real validada cuando solo existe dry-run.
+- Versionar `build/`, `sdkconfig`, `sdkconfig.old`, `managed_components` o `__pycache__`.
+- Reutilizar evidencias de otro laboratorio.
 
 ## Ejercicios
 
-- Clasificar cada escenario como funcional, inseguro, mitigado o no validado.
+- Clasificar el escenario como funcional, inseguro, mitigado o no validado.
 - Identificar qué activo protege cada mitigación.
 - Revisar si los logs contienen secretos.
+- Relacionar cada evidencia con el requisito que valida.
 
 ## Preguntas de repaso
 
-- ¿Por qué usuario/password sin TLS no protege credenciales?
-- ¿Qué diferencia hay entre TLS y mTLS?
-- ¿Por qué un certificado expirado debe provocar fallo de conexión?
+- ¿Qué diferencia hay entre conectividad funcional y cumplimiento de seguridad?
+- ¿Qué evidencia demuestra que el escenario fue probado?
+- ¿Qué condición impide declarar `CUMPLE`?
+- ¿Qué queda fuera de alcance en dry-run?
 
 ## Fuentes
 
-- Documentación pública de `test.mosquitto.org`.
-- Documentación oficial de ESP-IDF.
-- Estándar audit-grade interno del proyecto.
+- Documentación del repositorio.
+- Estándar audit-grade del proyecto.
+- Documentación oficial de ESP-IDF cuando aplique.
+- Documentación pública de `test.mosquitto.org` para LAB 03.
 
 ## Estado
 
@@ -177,11 +167,16 @@ python labs/lab03_mqtt/tools/capture_static_gates.py
 CUMPLE:
 - LAB 03 queda modelado como familia MQTT.
 - LAB 03A queda aislado como sublaboratorio para M03-1883.
+- Gates agregados disponibles en `labs/lab03_mqtt/tools/`.
+
+NO CUMPLE:
+- Los escenarios MQTT sin TLS no son seguros para secretos ni payloads sensibles.
 
 NO VALIDADO:
-- LAB 03B y posteriores no están cerrados.
-- Conexión MQTT real todavía no forma parte del cierre dry-run.
+- Conexión MQTT real contra `test.mosquitto.org`.
+- TLS, mTLS y WebSockets reales.
 
 PENDIENTE:
-- Continuar con LAB 03B después de cerrar gates y evidencia estática.
+- Implementar LAB 03B en su propio subdirectorio.
+- Regenerar evidencias cada vez que cambien gates o documentación.
 ```

@@ -1,33 +1,49 @@
-# Modelo de publicación
+# Modelo de publicación del repositorio
 
 ## Índice
 
-- [Criterio](#criterio)
-- [Cierre transversal](#cierre-transversal)
+- [Objetivo](#objetivo)
+- [Regla de publicación](#regla-de-publicacion)
+- [Artefactos afectados](#artefactos-afectados)
 - [Estado](#estado)
 
-## Criterio
+## Objetivo
 
-Cada entrega debe mantener sincronizados repositorio, libro, roadmap, changelog, documentación de laboratorio, herramientas y evidencias.
+Definir cómo se publica una entrega audit-grade en `secure-embedded-labs`.
 
-## Cierre transversal
+## Regla de publicación
 
-Antes de continuar con un laboratorio nuevo deben pasar, como mínimo:
+Una entrega no es solo firmware. Una entrega puede afectar código, documentación, laboratorios, evidencias, libro, changelog y gates.
 
-```powershell
-python tools/repo_quality_gates/run_static_repo_gates.py
-```
+No se declara cierre si el estado queda inconsistente entre documentación y evidencia.
 
-Cuando aplique LAB 03:
+## Artefactos afectados
 
-```powershell
-python labs/lab03_mqtt/tools/run_static_gates.py
-python labs/lab03_mqtt/tools/capture_static_gates.py
+Cada cambio de laboratorio debe revisar, cuando aplique:
+
+```text
+README.md
+ROADMAP.md
+CHANGELOG.md
+labs/README.md
+book/README.md
+book/chapters/*
+docs/index.md
+docs/learning_path.md
+docs/publishing_model.md
+tools/repo_quality_gates/*
+labs/<lab>/README.md
+labs/<lab>/CHANGELOG.md
+labs/<lab>/docs/*
+labs/<lab>/evidence/README.md
 ```
 
 ## Estado
 
 ```text
 CUMPLE:
-- El modelo exige sincronización documental y evidencial antes de avanzar.
+- Criterio transversal documentado.
+
+PENDIENTE:
+- Automatizar comprobaciones adicionales si el repositorio crece.
 ```

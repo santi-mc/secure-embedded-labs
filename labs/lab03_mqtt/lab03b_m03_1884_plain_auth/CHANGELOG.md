@@ -1,4 +1,4 @@
-# Changelog — LAB 03B
+# Changelog — LAB 03B — M03-1884 / MQTT TCP plano con autenticación
 
 ## Índice
 
@@ -6,12 +6,8 @@
 
 ## Unreleased
 
-### Estado
-
 ```text
-PENDIENTE
+PENDIENTE:
+- No implementado todavía.
+- Debe comenzar como dry-run contractual antes de conexión real.
 ```
-
-### Notas
-
-- Sublaboratorio asociado a `M03-1884` dentro de LAB 03 MQTT.
