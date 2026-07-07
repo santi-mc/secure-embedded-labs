@@ -15,6 +15,8 @@
 - Actualizados README raíz, ROADMAP, libro, labs README, publishing model y árbol documental.
 - Reescritos gates globales y LAB 03 con formato Python ejecutable y mantenible.
 - Regenerada la evidencia agregada de gates para LAB 03.
+- Retiradas herramientas legacy de mantenimiento de LAB 03 que seguían apuntando a rutas obsoletas.
+- Añadido gate global de sintaxis Python para herramientas versionadas.
 
 ### Status
 

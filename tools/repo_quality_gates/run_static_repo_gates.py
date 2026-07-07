@@ -7,6 +7,7 @@ Firmware build gates must be executed inside each lab when firmware exists.
 
 from __future__ import annotations
 
+import ast
 import sys
 from pathlib import Path
 
@@ -124,11 +125,24 @@ def check_markdown_indices() -> None:
             fail(f"Markdown without index: {md.relative_to(ROOT)}")
 
 
+
+def check_python_syntax() -> None:
+    for py_file in ROOT.rglob("*.py"):
+        if ".git" in py_file.parts:
+            continue
+
+        try:
+            source = py_file.read_text(encoding="utf-8")
+            ast.parse(source, filename=str(py_file))
+        except SyntaxError as exc:
+            fail(f"Python syntax error in {py_file.relative_to(ROOT)}: {exc.msg} at line {exc.lineno}")
+
 def main() -> int:
     check_required_files()
     check_lab_readmes()
     check_forbidden_artifacts()
     check_markdown_indices()
+    check_python_syntax()
 
     print("PASS: static repository gates")
     return 0
