@@ -1,4 +1,4 @@
-# Changelog — LAB 03F — M03-8887 / rechazo de certificado expirado
+# Changelog — LAB 03F
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03f_m03_8887_expired_cert_rejection` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-8887`.
+```text
+PENDIENTE
+```
 
-### Status
+### Notas
 
-- Estado actual: `PENDIENTE`.
+- Sublaboratorio asociado a `M03-8887` dentro de LAB 03 MQTT.

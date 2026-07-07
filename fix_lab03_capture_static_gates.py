@@ -1,4 +1,10 @@
-from __future__ import annotations
+from pathlib import Path
+
+path = Path("labs/lab03_mqtt/tools/capture_static_gates.py")
+if not path.exists():
+    raise SystemExit(f"FAIL: missing file: {path}")
+
+content = '''from __future__ import annotations
 
 import subprocess
 import sys
@@ -85,3 +91,7 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+'''
+
+path.write_text(content, encoding="utf-8", newline="\n")
+print(f"fixed: {path}")

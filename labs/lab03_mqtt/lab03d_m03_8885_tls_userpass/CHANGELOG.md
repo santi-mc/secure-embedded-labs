@@ -1,4 +1,4 @@
-# Changelog — LAB 03D — M03-8885 / MQTT TLS con usuario/password
+# Changelog — LAB 03D
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03d_m03_8885_tls_userpass` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-8885`.
+```text
+PENDIENTE
+```
 
-### Status
+### Notas
 
-- Estado actual: `PENDIENTE`.
+- Sublaboratorio asociado a `M03-8885` dentro de LAB 03 MQTT.

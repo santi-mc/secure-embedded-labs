@@ -2,34 +2,24 @@
 
 ## Índice
 
-- [Evidencias agregadas](#evidencias-agregadas)
-- [Evidencias por sublaboratorio](#evidencias-por-sublaboratorio)
+- [Resumen](#resumen)
+- [Evidencias](#evidencias)
 - [Estado](#estado)
 
-## Evidencias agregadas
+## Resumen
 
-| Evidencia | Estado | Descripción |
-| --- | --- | --- |
-| `lab03_static_gates.txt` | CUMPLE si termina en `capture_validation result=PASS` | Gate global + gate familia LAB 03 |
+Esta carpeta contiene evidencias agregadas de la familia LAB 03 MQTT.
 
-## Evidencias por sublaboratorio
+## Evidencias
 
-| Sublab | Evidencia | Estado |
-| --- | --- | --- |
-| LAB 03A | `../lab03a_m03_1883_plain_no_auth/evidence/lab03_m03_1883_console.log` | CUMPLE si termina en PASS |
-| LAB 03B | evidencia propia futura | PENDIENTE |
-| LAB 03C | evidencia propia futura | PENDIENTE |
-| LAB 03D | evidencia propia futura | PENDIENTE |
-| LAB 03E | evidencia propia futura | PENDIENTE |
-| LAB 03F | evidencia propia futura | PENDIENTE |
-| LAB 03G | evidencia propia futura | PENDIENTE |
+| Evidencia | Estado |
+| --- | --- |
+| `lab03_static_gates.txt` | CUMPLE cuando se regenere con gates actuales |
+| LAB 03A consola | Ver `../lab03a_m03_1883_plain_no_auth/evidence/` |
 
 ## Estado
 
 ```text
-CUMPLE:
-- Evidencias agregadas separadas de evidencias de escenario.
-
 PENDIENTE:
-- Regenerar lab03_static_gates.txt tras la migración estructural.
+- Regenerar `lab03_static_gates.txt` después del saneamiento.
 ```

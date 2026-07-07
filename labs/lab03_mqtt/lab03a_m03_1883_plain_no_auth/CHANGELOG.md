@@ -1,4 +1,4 @@
-# Changelog — LAB 03A — M03-1883 / MQTT TCP plano sin autenticación
+# Changelog — LAB 03A
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03a_m03_1883_plain_no_auth` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-1883`.
+```text
+CUMPLE dry-run
+```
 
-### Status
+### Notas
 
-- Estado actual: `CUMPLE dry-run`.
+- Sublaboratorio asociado a `M03-1883` dentro de LAB 03 MQTT.

@@ -8,22 +8,10 @@
 
 ### Changed
 
-- LAB 03 deja de representarse como `lab03_mqtt` y pasa a `lab03_mqtt`.
-- La matriz MQTT se reorganiza como familia de sublaboratorios independientes.
-- LAB 03A conserva la evidencia dry-run de M03-1883 en su propio subdirectorio.
+- LAB 03 queda organizado como familia MQTT en `labs/lab03_mqtt/`.
+- LAB 03A queda aislado como sublaboratorio independiente para `M03-1883`.
+- LAB 03B a LAB 03G quedan preparados como sublaboratorios pendientes.
 
-### Added
+### Fixed
 
-- Estructura `lab03a` a `lab03g` para cubrir todos los escenarios MQTT del broker de pruebas.
-- Directorio `common/` para contratos y reutilización explícita entre sublaboratorios.
-
-### Status
-
-```text
-CUMPLE:
-- Reorganización estructural de LAB 03 como familia MQTT.
-- LAB 03A queda aislado como sublaboratorio.
-
-NO VALIDADO:
-- Gates locales tras aplicar la migración, hasta ejecutar las herramientas.
-```
+- Saneados README y gates tras la migración desde `lab03_mqtt_tls`.

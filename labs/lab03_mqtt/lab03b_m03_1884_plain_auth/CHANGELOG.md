@@ -1,4 +1,4 @@
-# Changelog — LAB 03B — M03-1884 / MQTT TCP plano con usuario/password
+# Changelog — LAB 03B
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03b_m03_1884_plain_auth` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-1884`.
+```text
+PENDIENTE
+```
 
-### Status
+### Notas
 
-- Estado actual: `PENDIENTE`.
+- Sublaboratorio asociado a `M03-1884` dentro de LAB 03 MQTT.

@@ -1,4 +1,4 @@
-# Changelog — LAB 03E — M03-8884 / mTLS con certificado cliente
+# Changelog — LAB 03E
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03e_m03_8884_mtls_client_cert` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-8884`.
+```text
+PENDIENTE
+```
 
-### Status
+### Notas
 
-- Estado actual: `PENDIENTE`.
+- Sublaboratorio asociado a `M03-8884` dentro de LAB 03 MQTT.

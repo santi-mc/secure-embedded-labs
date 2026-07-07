@@ -1,4 +1,4 @@
-# Changelog — LAB 03C — M03-8883/M03-8886 / TLS con validación de servidor
+# Changelog — LAB 03C
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03c_m03_8883_8886_tls_server_auth` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-8883 / M03-8886`.
+```text
+PENDIENTE
+```
 
-### Status
+### Notas
 
-- Estado actual: `PENDIENTE`.
+- Sublaboratorio asociado a `M03-8883 / M03-8886` dentro de LAB 03 MQTT.

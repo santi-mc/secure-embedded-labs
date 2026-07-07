@@ -1,4 +1,4 @@
-# Changelog — LAB 03G — MQTT over WebSockets / WS y WSS
+# Changelog — LAB 03G
 
 ## Índice
 
@@ -6,11 +6,12 @@
 
 ## Unreleased
 
-### Added
+### Estado
 
-- Directorio independiente `lab03g_m03_websockets` dentro de la familia LAB 03 MQTT.
-- Contrato documental mínimo para el escenario `M03-8080 / M03-8081 / M03-8090 / M03-8091`.
+```text
+PENDIENTE
+```
 
-### Status
+### Notas
 
-- Estado actual: `PENDIENTE`.
+- Sublaboratorio asociado a `M03-8080/8081/8090/8091` dentro de LAB 03 MQTT.

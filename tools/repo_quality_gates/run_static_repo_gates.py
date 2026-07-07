@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Static repository gates for Secure Embedded Labs.
-
-These gates validate repository structure only. Firmware build gates must be
-executed inside each lab when firmware exists.
-"""
+"""Static repository gates for Secure Embedded Labs."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -91,20 +87,23 @@ def check_lab_readmes() -> None:
 
 def check_forbidden_artifacts() -> None:
     for path in ROOT.rglob("*"):
-        rel_parts = set(path.relative_to(ROOT).parts)
-        if rel_parts & FORBIDDEN_PATH_PARTS:
-            fail(f"forbidden generated directory present: {path.relative_to(ROOT)}")
+        rel = path.relative_to(ROOT)
+        if ".git" in rel.parts:
+            continue
+        if set(rel.parts) & FORBIDDEN_PATH_PARTS:
+            fail(f"forbidden generated directory present: {rel}")
         if path.name in FORBIDDEN_FILES:
-            fail(f"forbidden generated/config file present: {path.relative_to(ROOT)}")
+            fail(f"forbidden generated/config file present: {rel}")
 
 
 def check_markdown_indices() -> None:
     for md in ROOT.rglob("*.md"):
-        if "/.git/" in str(md):
+        rel = md.relative_to(ROOT)
+        if ".git" in rel.parts:
             continue
         text = md.read_text(encoding="utf-8")
         if "## Índice" not in text and md.name.upper() != "LICENSE.md":
-            fail(f"Markdown without index: {md.relative_to(ROOT)}")
+            fail(f"Markdown without index: {rel}")
 
 
 def main() -> int:
