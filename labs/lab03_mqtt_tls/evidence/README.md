@@ -16,8 +16,8 @@ No se deben versionar credenciales reales, certificados privados ni payloads sen
 
 | Fichero | Estado | Descripción |
 | --- | --- | --- |
-| `lab03_m03_1883_console.log` | PENDIENTE | Baseline MQTT 1883 sin TLS. |
-| `lab03_static_gates.txt` | PENDIENTE | Gates estáticos. |
+| `lab03_m03_1883_console.log` | CUMPLE | Baseline MQTT 1883 sin TLS. |
+| `lab03_static_gates.txt` | CUMPLE | Gates estáticos. |
 
 ## Pendientes
 

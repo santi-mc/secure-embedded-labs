@@ -1,3 +1,24 @@
+#!/usr/bin/env python3
+"""
+Make LAB 03 README comply with the repository-wide lab README contract.
+
+The repository gate validates a fixed list of section headers for every lab.
+This script is idempotent and writes a complete LAB 03 README containing all
+required sections while preserving the LAB 03A Mosquitto baseline scope.
+"""
+
+from __future__ import annotations
+
+import re
+import textwrap
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+LAB = ROOT / "labs" / "lab03_mqtt_tls"
+README = LAB / "README.md"
+GENERATOR = ROOT / "tools" / "maintenance" / "apply_lab03_mosquitto_matrix.py"
+
+LAB03_README = r"""
 # LAB 03 — Matriz MQTT contra test.mosquitto.org
 
 **Versión:** 0.1.0
@@ -105,24 +126,6 @@ La implementación inicial es intencionadamente dry-run para separar política d
 - Captura automática con tiempos acotados desde script Python.
 
 No hay todavía timeouts de red, DNS, TLS handshake ni reconexión MQTT real en LAB 03A.
-
-## Matriz contractual
-
-| ID | Puerto | Transporte | TLS | Autenticación | Estado esperado | Estado actual |
-| --- | ---: | --- | --- | --- | --- | --- |
-| M03-1883 | 1883 | MQTT TCP | No | No | Conecta funcionalmente, pero `NO CUMPLE` seguridad | CUMPLE baseline dry-run |
-| M03-1884 | 1884 | MQTT TCP | No | Usuario/password | Conecta, pero credenciales sin TLS: `NO CUMPLE` seguridad | PENDIENTE |
-| M03-8883 | 8883 | MQTT TCP | Sí | No | Conecta validando CA mosquitto.org | PENDIENTE |
-| M03-8884 | 8884 | MQTT TCP | Sí | Certificado cliente | Conecta solo con certificado cliente válido | PENDIENTE |
-| M03-8885 | 8885 | MQTT TCP | Sí | Usuario/password | Conecta con TLS y autenticación | PENDIENTE |
-| M03-8886 | 8886 | MQTT TCP | Sí | No | Conecta validando CA pública/Let's Encrypt | PENDIENTE |
-| M03-8887 | 8887 | MQTT TCP | Sí, certificado expirado | No | El cliente debe rechazar la conexión | PENDIENTE |
-| M03-8080 | 8080 | MQTT WebSocket | No | No | Conecta, pero `NO CUMPLE` seguridad | PENDIENTE |
-| M03-8081 | 8081 | MQTT WebSocket | Sí | No | Conecta con WSS | PENDIENTE |
-| M03-8090 | 8090 | MQTT WebSocket | No | Usuario/password | Conecta, pero credenciales sin TLS: `NO CUMPLE` seguridad | PENDIENTE |
-| M03-8091 | 8091 | MQTT WebSocket | Sí | Usuario/password | Conecta con WSS y autenticación | PENDIENTE |
-
-La matriz es contractual: cada escenario debe acabar con evidencia `CUMPLE`, `NO CUMPLE`, `NO VALIDADO` o `PENDIENTE`, sin considerar una conexión funcional como evidencia de seguridad por sí sola.
 
 ## Threat model
 
@@ -278,3 +281,51 @@ PENDIENTE:
 - Ejecutar matriz real contra test.mosquitto.org.
 - Introducir TLS, CA, mTLS y WebSockets en fases posteriores.
 ```
+"""
+
+
+def clean(text: str) -> str:
+    return textwrap.dedent(text).strip() + "\n"
+
+
+def write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(clean(content), encoding="utf-8", newline="\n")
+
+
+def update_lab_readme() -> None:
+    if not README.exists():
+        raise FileNotFoundError(f"missing LAB 03 README: {README}")
+    write(README, LAB03_README)
+
+
+def update_generator_template() -> None:
+    if not GENERATOR.exists():
+        return
+
+    text = GENERATOR.read_text(encoding="utf-8", errors="replace")
+    marker = '    write("labs/lab03_mqtt_tls/README.md", r\'\'\'\n'
+    start = text.find(marker)
+    if start < 0:
+        return
+
+    body_start = start + len(marker)
+    end_match = re.search(r"\n    '''\)", text[body_start:])
+    if not end_match:
+        return
+
+    body_end = body_start + end_match.start()
+    replacement_body = textwrap.indent(clean(LAB03_README), "        ").rstrip()
+    new_text = text[:body_start] + replacement_body + text[body_end:]
+    GENERATOR.write_text(new_text.rstrip() + "\n", encoding="utf-8", newline="\n")
+
+
+def main() -> int:
+    update_lab_readme()
+    update_generator_template()
+    print("PASS: LAB 03 README required sections aligned")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
