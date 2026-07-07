@@ -58,7 +58,7 @@ labs/          Laboratorios prácticos.
 ├── _template/
 ├── lab01_insecure_vs_hardened/
 ├── lab02_device_identity/
-├── lab03_mqtt_tls/
+├── lab03_mqtt/
 ├── lab04_signed_ota/
 ├── lab05_secure_remote_config/
 ├── lab06_physical_interface_hardening/
@@ -121,7 +121,7 @@ Capítulos actuales:
 
 - `book/chapters/01_firmware_inseguro_vs_endurecido.md`
 - `book/chapters/02_identidad_dispositivo.md`
-- `book/chapters/03_matriz_mqtt_tls.md`
+- `book/chapters/03_matriz_mqtt.md`
 
 ## Regla de actualización transversal
 

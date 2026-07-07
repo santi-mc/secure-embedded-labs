@@ -88,3 +88,18 @@ Un laboratorio solo se marca como cerrado cuando dispone de:
 ## Regla de avance
 
 No se abre una nueva fase de laboratorio si la fase anterior deja incoherencias en documentación transversal, evidencias, gates o libro.
+
+## LAB 03 — Familia MQTT contra test.mosquitto.org
+
+```text
+CUMPLE:
+- LAB 03A — M03-1883 / MQTT TCP plano sin TLS y sin autenticación / dry-run.
+
+PENDIENTE:
+- LAB 03B — M03-1884 / MQTT TCP plano con usuario/password.
+- LAB 03C — M03-8883/M03-8886 / TLS servidor.
+- LAB 03D — M03-8885 / TLS + usuario/password.
+- LAB 03E — M03-8884 / mTLS.
+- LAB 03F — M03-8887 / certificado expirado.
+- LAB 03G — MQTT over WebSockets.
+```

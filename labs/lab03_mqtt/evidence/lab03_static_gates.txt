@@ -1,0 +1,11 @@
+# LAB 03 MQTT static gates evidence
+
+$ C:\Espressif\python_env\idf6.0_py3.13_env\Scripts\python.exe tools/repo_quality_gates/run_static_repo_gates.py
+PASS: static repository gates
+# returncode=0
+
+$ C:\Espressif\python_env\idf6.0_py3.13_env\Scripts\python.exe labs/lab03_mqtt/tools/run_static_gates.py
+PASS: LAB 03 static gates completed successfully
+# returncode=0
+
+# capture_validation result=PASS

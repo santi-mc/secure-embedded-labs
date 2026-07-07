@@ -25,3 +25,18 @@
 - Plantillas de laboratorios con README e índice.
 - Licencias separadas para código y documentación.
 - Gates estáticos iniciales.
+
+## LAB 03 MQTT family restructure
+
+### Changed
+
+- `labs/lab03_mqtt` pasa a `labs/lab03_mqtt`.
+- LAB 03 queda organizado como familia de sublaboratorios LAB 03A–LAB 03G.
+- LAB 03A conserva la evidencia dry-run M03-1883 en su propio subdirectorio.
+
+### Status
+
+```text
+CUMPLE:
+- Estructura corregida antes de continuar con LAB 03B.
+```

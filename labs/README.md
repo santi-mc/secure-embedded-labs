@@ -2,69 +2,41 @@
 
 ## Índice
 
-- [Regla común](#regla-común)
-- [Lista de laboratorios](#lista-de-laboratorios)
-- [Estados actuales](#estados-actuales)
-- [Plantilla](#plantilla)
-- [Regla de cierre](#regla-de-cierre)
+- [Propósito](#propósito)
+- [Árbol](#árbol)
+- [Estado](#estado)
 
-## Regla común
+## Propósito
 
-Cada laboratorio debe tener un `README.md` con índice y estructura didáctica completa.
+Agrupar laboratorios reproducibles de ciberseguridad embebida con evidencias auditables.
 
-Cada avance debe actualizar también los artefactos transversales del repositorio: README raíz, ROADMAP, CHANGELOG, libro, docs, evidencias e índices cuando aplique.
+## Árbol
 
-## Lista de laboratorios
+```text
+labs/
+├── _template/
+├── lab01_insecure_vs_hardened/
+├── lab02_device_identity/
+├── lab03_mqtt/
+│   ├── common/
+│   ├── lab03a_m03_1883_plain_no_auth/
+│   ├── lab03b_m03_1884_plain_auth/
+│   ├── lab03c_m03_8883_8886_tls_server_auth/
+│   ├── lab03d_m03_8885_tls_userpass/
+│   ├── lab03e_m03_8884_mtls_client_cert/
+│   ├── lab03f_m03_8887_expired_cert_rejection/
+│   └── lab03g_m03_websockets/
+└── lab04...lab10/
+```
 
-| Lab | Carpeta | Tema | Estado |
-| ---: | --- | --- | --- |
-| 01 | `lab01_insecure_vs_hardened` | Firmware inseguro vs firmware endurecido | CUMPLE |
-| 02 | `lab02_device_identity` | Identidad única de dispositivo | CUMPLE |
-| 03 | `lab03_mqtt_tls` | Matriz MQTT contra test.mosquitto.org | EN CURSO: 03A CUMPLE |
-| 04 | `lab04_signed_ota` | OTA firmada con rollback | PENDIENTE |
-| 05 | `lab05_secure_remote_config` | Configuración remota segura | PENDIENTE |
-| 06 | `lab06_physical_interface_hardening` | Hardening de interfaces físicas | PENDIENTE |
-| 07 | `lab07_sbom_release_traceability` | SBOM y trazabilidad de release | PENDIENTE |
-| 08 | `lab08_secure_boot_flash_encryption` | Secure Boot + Flash Encryption | PENDIENTE |
-| 09 | `lab09_secure_multi_interface_gateway` | Gateway seguro multi-interfaz | PENDIENTE |
-| 10 | `lab10_mini_psirt` | Mini PSIRT de producto | PENDIENTE |
-
-## Estados actuales
+## Estado
 
 ```text
 CUMPLE:
-- LAB 01 con evidencias de consola, secret scan y gates.
-- LAB 02 con evidencias de identidad INSECURE/HARDENED y gates.
-- LAB 03A/M03-1883 como dry-run MQTT plano sin TLS con evidencia de consola y gates.
-
-NO VALIDADO:
-- Builds formales con stdout completo y cero warnings para todos los laboratorios.
-- Conexiones reales MQTT contra broker público.
-- TLS/mTLS/WebSockets de LAB 03.
+- LAB 01 cerrado para el alcance actual.
+- LAB 02 cerrado para el alcance actual.
+- LAB 03A cerrado como dry-run dentro de la familia MQTT.
 
 PENDIENTE:
-- LAB 03B/M03-1884.
-- LAB 04 a LAB 10.
+- LAB 03B y siguientes sublaboratorios MQTT.
 ```
-
-## Plantilla
-
-La plantilla está en:
-
-```text
-labs/_template/README.md
-```
-
-## Regla de cierre
-
-No se marca un laboratorio como cerrado si no están alineados:
-
-- README del laboratorio;
-- documentación interna del laboratorio;
-- evidencias;
-- gates;
-- README raíz;
-- ROADMAP;
-- CHANGELOG global;
-- libro o capítulo correspondiente;
-- índices de navegación.

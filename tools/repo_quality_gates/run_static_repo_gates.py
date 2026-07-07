@@ -29,7 +29,7 @@ REQUIRED_FILES = [
 LAB_DIRS = [
     "lab01_insecure_vs_hardened",
     "lab02_device_identity",
-    "lab03_mqtt_tls",
+    "lab03_mqtt",
     "lab04_signed_ota",
     "lab05_secure_remote_config",
     "lab06_physical_interface_hardening",

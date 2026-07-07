@@ -22,7 +22,7 @@ book/
 ├── chapters/
 │   ├── 01_firmware_inseguro_vs_endurecido.md
 │   ├── 02_identidad_dispositivo.md
-│   └── 03_matriz_mqtt_tls.md
+│   └── 03_matriz_mqtt.md
 ├── figures/
 └── references/
 ```

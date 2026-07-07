@@ -53,3 +53,7 @@ labs/<lab>/CHANGELOG.md
 labs/<lab>/docs/*
 labs/<lab>/evidence/README.md
 ```
+
+## Cierre transversal LAB 03 MQTT
+
+Cada sublaboratorio de `labs/lab03_mqtt/` debe actualizar, como mínimo, su README, CHANGELOG, evidencias, documentación del libro, ROADMAP y changelog global antes de considerarse cerrado.
