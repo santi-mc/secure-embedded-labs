@@ -32,14 +32,15 @@ El firmware y las evidencias se encuentran en:
 labs/lab01_insecure_vs_hardened/
 ```
 
-Este capítulo debe actualizarse con las evidencias reales cuando el laboratorio se ejecute en hardware.
+LAB 01 está cerrado para el alcance actual con evidencias automáticas de consola, scanner de secretos y gates estáticos.
 
 ## Estado
 
 ```text
 CUMPLE:
 - Capítulo inicial alineado con LAB 01.
+- Evidencias del laboratorio incorporadas al estado del repositorio.
 
 NO VALIDADO:
-- Evidencias reales pendientes de incorporar.
+- Revisión editorial completa pendiente.
 ```
